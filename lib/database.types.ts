@@ -25,10 +25,11 @@ export type Database = {
           content: string
           excerpt: string
           featured_image: string | null
-          category_id: string
+          category_id: string | null
           author: string
           created_at: string
           views: number
+          published: boolean
         }
         Insert: {
           title: string
@@ -36,8 +37,9 @@ export type Database = {
           content: string
           excerpt: string
           featured_image?: string | null
-          category_id: string
+          category_id?: string | null
           author: string
+          published?: boolean
         }
         Update: {
           title?: string
@@ -45,8 +47,9 @@ export type Database = {
           content?: string
           excerpt?: string
           featured_image?: string | null
-          category_id?: string
+          category_id?: string | null
           author?: string
+          published?: boolean
         }
       }
       comments: {
@@ -55,17 +58,20 @@ export type Database = {
           post_id: string
           name: string
           content: string
+          approved: boolean
           created_at: string
         }
         Insert: {
           post_id: string
           name: string
           content: string
+          approved?: boolean
         }
         Update: {
           post_id?: string
           name?: string
           content?: string
+          approved?: boolean
         }
       }
       breaking_news: {
