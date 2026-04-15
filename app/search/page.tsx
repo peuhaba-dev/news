@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 import NewsCard from '@/components/NewsCard'
 import AdSlot from '@/components/AdSlot'
 import type { Post } from '@/types'

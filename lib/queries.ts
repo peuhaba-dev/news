@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from './supabase'
+import { createServerSupabaseClient } from './supabase-server'
 import type { Post, Category, Comment, BreakingNews } from '@/types'
 
 // ────────────────────────────────────────────
