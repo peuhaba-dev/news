@@ -1,3 +1,4 @@
+import { createStaticSupabaseClient } from './supabase-static'
 import { createServerSupabaseClient } from './supabase-server'
 import type { Post, Category, Comment, BreakingNews } from '@/types'
 
@@ -113,7 +114,7 @@ export async function getRelatedPosts(categoryId: string, excludeId: string, lim
 }
 
 export async function getAllPostSlugs(): Promise<string[]> {
-  const supabase = await createServerSupabaseClient()
+  const supabase = createStaticSupabaseClient()
   const { data } = await (supabase as any).from('posts').select('slug')
   return data?.map((p: any) => p.slug) ?? []
 }
@@ -149,7 +150,7 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
 }
 
 export async function getAllCategorySlugs(): Promise<string[]> {
-  const supabase = await createServerSupabaseClient()
+  const supabase = createStaticSupabaseClient()
   const { data } = await (supabase as any).from('categories').select('slug')
   return data?.map((c: any) => c.slug) ?? []
 }
