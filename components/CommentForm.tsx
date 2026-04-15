@@ -18,11 +18,11 @@ export default function CommentForm({ postId }: CommentFormProps) {
 
     setStatus('loading')
     const supabase = createClient()
-    const { error } = await supabase.from('comments').insert({
-      post_id: postId,
-      name: name.trim(),
-      content: content.trim(),
-    })
+    const { error } = await (supabase as any).from('comments').insert({
+  post_id: postId,
+  name: name.trim(),
+  content: content.trim(),
+})
 
     if (error) {
       setStatus('error')
