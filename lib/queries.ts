@@ -7,7 +7,7 @@ import type { Post, Category, Comment, BreakingNews } from '@/types'
 
 export async function getLatestPosts(limit = 10): Promise<Post[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .order('created_at', { ascending: false })
@@ -22,7 +22,7 @@ export async function getLatestPosts(limit = 10): Promise<Post[]> {
 
 export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .order('views', { ascending: false })
@@ -37,7 +37,7 @@ export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
 
 export async function getMostReadPosts(limit = 5): Promise<Post[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .order('views', { ascending: false })
@@ -52,7 +52,7 @@ export async function getMostReadPosts(limit = 5): Promise<Post[]> {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .eq('slug', slug)
@@ -64,7 +64,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 
   // Increment views (fire-and-forget)
-  supabase
+  ;(supabase as any)
     .from('posts')
     .update({ views: (data.views ?? 0) + 1 })
     .eq('slug', slug)
@@ -76,7 +76,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 export async function getPostsByCategory(categorySlug: string, limit = 12): Promise<Post[]> {
   const supabase = await createServerSupabaseClient()
 
-  const { data: category } = await supabase
+  const { data: category } = await (supabase as any)
     .from('categories')
     .select('id')
     .eq('slug', categorySlug)
@@ -84,7 +84,7 @@ export async function getPostsByCategory(categorySlug: string, limit = 12): Prom
 
   if (!category) return []
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .eq('category_id', category.id)
@@ -100,7 +100,7 @@ export async function getPostsByCategory(categorySlug: string, limit = 12): Prom
 
 export async function getRelatedPosts(categoryId: string, excludeId: string, limit = 4): Promise<Post[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .select('*, category:categories(*)')
     .eq('category_id', categoryId)
@@ -114,8 +114,8 @@ export async function getRelatedPosts(categoryId: string, excludeId: string, lim
 
 export async function getAllPostSlugs(): Promise<string[]> {
   const supabase = await createServerSupabaseClient()
-  const { data } = await supabase.from('posts').select('slug')
-  return data?.map((p) => p.slug) ?? []
+  const { data } = await (supabase as any).from('posts').select('slug')
+  return data?.map((p: any) => p.slug) ?? []
 }
 
 // ────────────────────────────────────────────
@@ -124,7 +124,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
 
 export async function getAllCategories(): Promise<Category[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('categories')
     .select('*')
     .order('name')
@@ -138,7 +138,7 @@ export async function getAllCategories(): Promise<Category[]> {
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('categories')
     .select('*')
     .eq('slug', slug)
@@ -150,8 +150,8 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
 
 export async function getAllCategorySlugs(): Promise<string[]> {
   const supabase = await createServerSupabaseClient()
-  const { data } = await supabase.from('categories').select('slug')
-  return data?.map((c) => c.slug) ?? []
+  const { data } = await (supabase as any).from('categories').select('slug')
+  return data?.map((c: any) => c.slug) ?? []
 }
 
 // ────────────────────────────────────────────
@@ -160,7 +160,7 @@ export async function getAllCategorySlugs(): Promise<string[]> {
 
 export async function getCommentsByPost(postId: string): Promise<Comment[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('comments')
     .select('*')
     .eq('post_id', postId)
@@ -176,7 +176,7 @@ export async function getCommentsByPost(postId: string): Promise<Comment[]> {
 
 export async function getBreakingNews(): Promise<BreakingNews[]> {
   const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('breaking_news')
     .select('*')
     .eq('active', true)
