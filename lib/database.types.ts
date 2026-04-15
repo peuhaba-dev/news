@@ -1,5 +1,3 @@
-// Auto-generate this with: npx supabase gen types typescript --project-id YOUR_PROJECT_ID
-// This is a placeholder — replace after running the generator.
 export type Database = {
   public: {
     Tables: {
@@ -10,8 +8,14 @@ export type Database = {
           slug: string
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['categories']['Row'], 'id' | 'created_at'>
-        Update: Partial<Database['public']['Tables']['categories']['Insert']>
+        Insert: {
+          name: string
+          slug: string
+        }
+        Update: {
+          name?: string
+          slug?: string
+        }
       }
       posts: {
         Row: {
@@ -26,8 +30,24 @@ export type Database = {
           created_at: string
           views: number
         }
-        Insert: Omit<Database['public']['Tables']['posts']['Row'], 'id' | 'created_at' | 'views'>
-        Update: Partial<Database['public']['Tables']['posts']['Insert']>
+        Insert: {
+          title: string
+          slug: string
+          content: string
+          excerpt: string
+          featured_image?: string | null
+          category_id: string
+          author: string
+        }
+        Update: {
+          title?: string
+          slug?: string
+          content?: string
+          excerpt?: string
+          featured_image?: string | null
+          category_id?: string
+          author?: string
+        }
       }
       comments: {
         Row: {
@@ -37,8 +57,16 @@ export type Database = {
           content: string
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['comments']['Row'], 'id' | 'created_at'>
-        Update: Partial<Database['public']['Tables']['comments']['Insert']>
+        Insert: {
+          post_id: string
+          name: string
+          content: string
+        }
+        Update: {
+          post_id?: string
+          name?: string
+          content?: string
+        }
       }
       breaking_news: {
         Row: {
@@ -47,8 +75,14 @@ export type Database = {
           active: boolean
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['breaking_news']['Row'], 'id' | 'created_at'>
-        Update: Partial<Database['public']['Tables']['breaking_news']['Insert']>
+        Insert: {
+          text: string
+          active?: boolean
+        }
+        Update: {
+          text?: string
+          active?: boolean
+        }
       }
     }
   }
