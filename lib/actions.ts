@@ -11,17 +11,17 @@ export async function createPost(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const title     = formData.get('title')     as string
-  const content   = formData.get('content')   as string
-  const excerpt   = formData.get('excerpt')   as string
-  const categoryId = formData.get('category_id') as string
-  const author    = formData.get('author')    as string
-  const image     = formData.get('featured_image') as string
-  const published = formData.get('published') === 'true'
+  const title      = formData.get('title')         as string
+  const content    = formData.get('content')       as string
+  const excerpt    = formData.get('excerpt')       as string
+  const categoryId = formData.get('category_id')  as string
+  const author     = formData.get('author')        as string
+  const image      = formData.get('featured_image') as string
+  const published  = formData.get('published') === 'true'
 
   const slug = slugify(title) + '-' + Date.now()
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('posts')
     .insert({
       title,
@@ -49,21 +49,21 @@ export async function updatePost(id: string, formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const title     = formData.get('title')     as string
-  const content   = formData.get('content')   as string
-  const excerpt   = formData.get('excerpt')   as string
-  const categoryId = formData.get('category_id') as string
-  const author    = formData.get('author')    as string
-  const image     = formData.get('featured_image') as string
-  const published = formData.get('published') === 'true'
+  const title      = formData.get('title')         as string
+  const content    = formData.get('content')       as string
+  const excerpt    = formData.get('excerpt')       as string
+  const categoryId = formData.get('category_id')  as string
+  const author     = formData.get('author')        as string
+  const image      = formData.get('featured_image') as string
+  const published  = formData.get('published') === 'true'
 
-  const { data: existing } = await supabase
+  const { data: existing } = await (supabase as any)
     .from('posts')
     .select('slug')
     .eq('id', id)
     .single()
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('posts')
     .update({
       title,
@@ -90,13 +90,17 @@ export async function deletePost(id: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const { data: existing } = await supabase
+  const { data: existing } = await (supabase as any)
     .from('posts')
     .select('slug')
     .eq('id', id)
     .single()
 
-  const { error } = await supabase.from('posts').delete().eq('id', id)
+  const { error } = await (supabase as any)
+    .from('posts')
+    .delete()
+    .eq('id', id)
+
   if (error) throw new Error(error.message)
 
   revalidatePath('/')
@@ -110,7 +114,7 @@ export async function approveComment(id: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  await supabase.from('comments').update({ approved: true }).eq('id', id)
+  await (supabase as any).from('comments').update({ approved: true }).eq('id', id)
   revalidatePath('/news/[slug]', 'page')
 }
 
@@ -120,7 +124,7 @@ export async function deleteComment(id: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  await supabase.from('comments').delete().eq('id', id)
+  await (supabase as any).from('comments').delete().eq('id', id)
   revalidatePath('/news/[slug]', 'page')
 }
 
@@ -130,6 +134,6 @@ export async function toggleBreakingNews(id: string, active: boolean) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  await supabase.from('breaking_news').update({ active }).eq('id', id)
+  await (supabase as any).from('breaking_news').update({ active }).eq('id', id)
   revalidatePath('/', 'layout')
 }
