@@ -13,12 +13,12 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(
-  cookiesToSet: {
-    name: string
-    value: string
-    options?: Record<string, any>
-  }[]
-) {
+          cookiesToSet: {
+            name: string
+            value: string
+            options?: Record<string, any>
+          }[]
+        ) {
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options)
           })
@@ -27,20 +27,29 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  // 🔥 WAJIB: gunakan getSession (bukan getUser)
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const user = session?.user ?? null
 
   const { pathname, searchParams } = request.nextUrl
 
+  // ===============================
   // 🔐 PROTECT ADMIN
-  if (pathname.startsWith('/admin') && !user) {
-    const loginUrl = new URL('/auth/login', request.url)
-    loginUrl.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(loginUrl)
+  // ===============================
+  if (pathname.startsWith('/admin')) {
+    if (!user) {
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
+  // ===============================
   // 🔁 REDIRECT SETELAH LOGIN
+  // ===============================
   if (user && pathname === '/auth/login') {
     const redirectTo = searchParams.get('redirect') || '/admin'
     return NextResponse.redirect(new URL(redirectTo, request.url))
@@ -49,6 +58,9 @@ export async function middleware(request: NextRequest) {
   return response
 }
 
+// ===============================
+// ⚙️ MATCHER
+// ===============================
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon\\.ico|sitemap\\.xml|robots\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)',
