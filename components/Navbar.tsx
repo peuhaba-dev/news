@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import type { Category } from '@/types'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 
 const NAV_ITEMS = [
   { label: 'Beranda', href: '/' },
@@ -23,16 +24,46 @@ interface NavbarProps {
 
 export default function Navbar({ categories }: NavbarProps) {
   const pathname = usePathname()
+  const router = useRouter()
+
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
 
+  const supabase = createBrowserSupabaseClient()
+
+  // Scroll effect
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Build nav items from DB categories if provided, fallback to static
+  // 🔐 Auth state listener (INI YANG PENTING)
+  useEffect(() => {
+    // get current user
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+    })
+
+    // listen perubahan login/logout
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null)
+      }
+    )
+
+    return () => {
+      listener.subscription.unsubscribe()
+    }
+  }, [supabase])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
+  }
+
   const navItems =
     categories && categories.length > 0
       ? [
@@ -48,7 +79,9 @@ export default function Navbar({ categories }: NavbarProps) {
     <nav
       className={`sticky top-0 z-50 bg-white border-b-[3px] border-aceh-green
                   transition-shadow duration-200
-                  ${scrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,0.12)]' : 'shadow-[0_2px_12px_rgba(0,0,0,0.08)]'}`}
+                  ${scrolled
+                    ? 'shadow-[0_4px_20px_rgba(0,0,0,0.12)]'
+                    : 'shadow-[0_2px_12px_rgba(0,0,0,0.08)]'}`}
     >
       <div className="max-w-portal mx-auto px-5 flex items-center h-14 gap-8">
 
@@ -64,9 +97,6 @@ export default function Navbar({ categories }: NavbarProps) {
             <div className="font-label text-[20px] font-bold text-aceh-green tracking-[0.5px]">
               Berita Meureno
             </div>
-            <div className="hidden sm:block text-[9.5px] text-ink-soft tracking-[1px] uppercase font-semibold">
-              Portal Berita Aceh
-            </div>
           </div>
         </Link>
 
@@ -78,13 +108,12 @@ export default function Navbar({ categories }: NavbarProps) {
               <Link
                 key={href}
                 href={href}
-                className={`font-label text-[13px] font-medium tracking-[0.5px] px-3 py-1.5
-                            rounded whitespace-nowrap transition-all duration-150
-                            ${hot
-                              ? 'text-aceh-red'
-                              : active || accent
-                                ? 'text-aceh-green font-bold'
-                                : 'text-ink-mid hover:text-aceh-green hover:bg-aceh-green-light'}`}
+                className={`font-label text-[13px] font-medium px-3 py-1.5 rounded
+                  ${hot
+                    ? 'text-aceh-red'
+                    : active || accent
+                      ? 'text-aceh-green font-bold'
+                      : 'text-ink-mid hover:text-aceh-green hover:bg-aceh-green-light'}`}
               >
                 {label}
               </Link>
@@ -94,54 +123,55 @@ export default function Navbar({ categories }: NavbarProps) {
 
         {/* Actions */}
         <div className="flex items-center gap-2.5 ml-auto shrink-0">
+
+          {/* 🔍 Search */}
           <Link
             href="/search"
-            className="p-1.5 text-ink-mid rounded hover:text-aceh-green
-                       hover:bg-aceh-green-light transition-all duration-150"
-            aria-label="Cari berita"
+            className="p-1.5 text-ink-mid rounded hover:text-aceh-green hover:bg-aceh-green-light"
           >
-            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
+            🔍
           </Link>
 
-          <Link
-            href="/auth/login"
-            className="font-label text-[12px] tracking-[0.5px] px-4 py-1.5
-                       bg-aceh-green text-white rounded font-semibold
-                       hover:bg-aceh-green-dark transition-colors duration-150"
-          >
-            Masuk
-          </Link>
+          {/* 🔐 AUTH BUTTON */}
+          {!user ? (
+            <Link
+              href="/auth/login"
+              className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold"
+            >
+              Masuk
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/admin"
+                className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold"
+              >
+                Dashboard
+              </Link>
 
-          {/* Mobile hamburger */}
+              <button
+                onClick={handleLogout}
+                className="font-label text-[12px] px-4 py-1.5 border border-border rounded"
+              >
+                Logout
+              </button>
+            </>
+          )}
+
+          {/* Mobile */}
           <button
-            className="lg:hidden p-1.5 text-ink-mid"
+            className="lg:hidden p-1.5"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              {mobileOpen
-                ? <path d="M6 18L18 6M6 6l12 12"/>
-                : <path d="M4 6h16M4 12h16M4 18h16"/>}
-            </svg>
+            ☰
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-t border-border px-5 py-3">
-          {navItems.map(({ label, href, hot }: any) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              className={`block font-label text-[14px] py-2 border-b border-border/50
-                          ${hot ? 'text-aceh-red' : 'text-ink-mid hover:text-aceh-green'}`}
-            >
+        <div className="lg:hidden bg-white border-t px-5 py-3">
+          {navItems.map(({ label, href }: any) => (
+            <Link key={href} href={href} className="block py-2">
               {label}
             </Link>
           ))}
