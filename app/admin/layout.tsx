@@ -11,7 +11,7 @@ async function getUserRole(userId: string) {
     .eq('id', userId)
     .single()
 
-  return data?.role
+  return (data as any)?.role
 }
 
 export default async function AdminLayout({
