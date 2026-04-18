@@ -4,10 +4,10 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 async function getStats() {
   const supabase = await createServerSupabaseClient()
   const [posts, categories, comments, breaking] = await Promise.all([
-    supabase.from('posts').select('id', { count: 'exact', head: true }),
-    supabase.from('categories').select('id', { count: 'exact', head: true }),
-    supabase.from('comments').select('id', { count: 'exact', head: true }).eq('approved', false),
-    supabase.from('breaking_news').select('id', { count: 'exact', head: true }).eq('active', true),
+    supabase.from('berita.posts').select('id', { count: 'exact', head: true }),
+    supabase.from('berita.categories').select('id', { count: 'exact', head: true }),
+    supabase.from('berita.comments').select('id', { count: 'exact', head: true }).eq('approved', false),
+    supabase.from('berita.breaking_news').select('id', { count: 'exact', head: true }).eq('active', true),
   ])
   return {
     posts:      posts.count ?? 0,
@@ -20,7 +20,7 @@ async function getStats() {
 async function getRecentPosts() {
   const supabase = await createServerSupabaseClient()
   const { data } = await supabase
-    .from('posts')
+    .from('berita.posts')
     .select('id, title, slug, author, created_at, views, published')
     .order('created_at', { ascending: false })
     .limit(8)
