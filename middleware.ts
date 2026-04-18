@@ -39,13 +39,13 @@ export async function middleware(request: NextRequest) {
   // ===============================
   // 🔐 PROTECT ADMIN
   // ===============================
-//  if (pathname.startsWith('/admin')) {
-//    if (!user) {
-//      const loginUrl = new URL('/auth/login', request.url)
-//      loginUrl.searchParams.set('redirect', pathname)
-//      return NextResponse.redirect(loginUrl)
-//    }
-//  }
+  if (pathname.startsWith('/admin')) {
+    if (!user) {
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
 
   // ===============================
   // 🔁 REDIRECT SETELAH LOGIN
