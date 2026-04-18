@@ -1,23 +1,36 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 
 export default function LoginPage() {
-  const router  = useRouter()
-  const [email, setEmail]       = useState('')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const supabase = createBrowserSupabaseClient()
+
+  // 🔁 AUTO REDIRECT kalau sudah login
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        const redirectTo = searchParams.get('redirect') || '/admin'
+        router.replace(redirectTo)
+      }
+    })
+  }, [router, searchParams, supabase])
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
     const { error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -29,7 +42,10 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/')
+    // 🎯 Redirect sesuai middleware
+    const redirectTo = searchParams.get('redirect') || '/admin'
+
+    router.push(redirectTo)
     router.refresh()
   }
 
@@ -46,9 +62,13 @@ export default function LoginPage() {
                          2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
               </svg>
             </div>
-            <span className="font-label text-[22px] font-bold text-aceh-green">Berita Meureno</span>
+            <span className="font-label text-[22px] font-bold text-aceh-green">
+              Berita Meureno
+            </span>
           </Link>
-          <p className="text-ink-soft text-[14px] mt-2">Masuk ke akun Anda</p>
+          <p className="text-ink-soft text-[14px] mt-2">
+            Masuk ke akun Anda
+          </p>
         </div>
 
         {/* Card */}
@@ -114,7 +134,9 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-[12px] text-ink-soft mt-4">
-          <Link href="/" className="hover:text-aceh-green">← Kembali ke Beranda</Link>
+          <Link href="/" className="hover:text-aceh-green">
+            ← Kembali ke Beranda
+          </Link>
         </p>
       </div>
     </div>
