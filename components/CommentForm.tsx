@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import { createBrowserSupabaseClient } from '@/lib/supabase'
 
 interface CommentFormProps {
   postId: string
@@ -17,7 +17,7 @@ export default function CommentForm({ postId }: CommentFormProps) {
     if (!name.trim() || !content.trim()) return
 
     setStatus('loading')
-    const supabase = createClient()
+    const supabase = createBrowserSupabaseClient()
     const { error } = await (supabase as any).from('comments').insert({
   post_id: postId,
   name: name.trim(),
