@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase-browser'; // ← Import fungsi createClient
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'; // ← Import fungsi createClient
 
 function ConfirmContent() {
   const router = useRouter();
