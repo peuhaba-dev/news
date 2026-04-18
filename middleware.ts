@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
 
   // 🔐 PROTECT ADMIN
-  if (pathname.startsWith('/admin') && !user) {
+  // if (pathname.startsWith('/admin') && !user) {
     const loginUrl = new URL('/auth/login', request.url)
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
