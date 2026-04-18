@@ -11,7 +11,7 @@ function ConfirmContent() {
   const type = searchParams.get('type');
 
   useEffect(() => {
-    const supabase = createClient(); // ← Buat instance client di sini
+    const supabase = createBrowserSupabaseClient(); // ← Buat instance client di sini
     
     if (token_hash && type) {
       supabase.auth.verifyOtp({
