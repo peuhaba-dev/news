@@ -12,37 +12,32 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          )
-          response = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options as Parameters<typeof response.cookies.set>[2]),
-          )
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
         },
       },
-    },
+    }
   )
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (!user) {
-      const loginUrl = new URL('/auth/login', request.url)
-      loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
-      return NextResponse.redirect(loginUrl)
-    }
+  const { pathname, searchParams } = request.nextUrl
+
+  // 🔐 PROTECT ADMIN
+  if (pathname.startsWith('/admin') && !user) {
+    const loginUrl = new URL('/auth/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
-  if (
-    user &&
-    (request.nextUrl.pathname === '/auth/login' ||
-      request.nextUrl.pathname === '/auth/register')
-  ) {
-    return NextResponse.redirect(new URL('/', request.url))
+  // 🔁 REDIRECT SETELAH LOGIN
+  if (user && pathname === '/auth/login') {
+    const redirectTo = searchParams.get('redirect') || '/admin'
+    return NextResponse.redirect(new URL(redirectTo, request.url))
   }
 
   return response
