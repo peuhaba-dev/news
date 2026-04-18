@@ -8,4 +8,4 @@
  * import dari '@/lib/supabase-server':
  *   import { createServerSupabaseClient } from '@/lib/supabase-server'
  */
-export { createClient } from './supabase-browser'
+export { createBrowserSupabaseClient } from './supabase-browser'
