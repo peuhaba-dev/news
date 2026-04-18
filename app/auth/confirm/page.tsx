@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase'; // sesuaikan dengan config supabase Anda
+import { createClient } from '@/lib/supabase-browser'; // ← Import fungsi createClient
 
 function ConfirmContent() {
   const router = useRouter();
@@ -11,6 +11,8 @@ function ConfirmContent() {
   const type = searchParams.get('type');
 
   useEffect(() => {
+    const supabase = createClient(); // ← Buat instance client di sini
+    
     if (token_hash && type) {
       supabase.auth.verifyOtp({
         token_hash: token_hash,
@@ -18,19 +20,23 @@ function ConfirmContent() {
       }).then(({ error }) => {
         if (error) {
           console.error('Verification error:', error);
-          router.push('/auth/error');
+          router.push('/auth/error?message=' + encodeURIComponent(error.message));
         } else {
-          router.push('/auth/success');
+          // Redirect ke dashboard atau halaman sukses
+          router.push('/dashboard');
         }
       });
+    } else if (!token_hash) {
+      router.push('/auth/error?message=No token provided');
     }
   }, [token_hash, type, router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
         <h1 className="text-2xl font-bold mb-4">Memverifikasi akun Anda...</h1>
-        <p>Harap tunggu sebentar.</p>
+        <p className="text-gray-600">Harap tunggu sebentar.</p>
       </div>
     </div>
   );
@@ -38,7 +44,14 @@ function ConfirmContent() {
 
 export default function ConfirmPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    }>
       <ConfirmContent />
     </Suspense>
   );
