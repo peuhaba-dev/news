@@ -2,18 +2,6 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 
-async function getRole(userId: string) {
-  const supabase = await createServerSupabaseClient()
-
-  const { data } = await supabase
-    .from('berita.user_roles')
-    .select('role')
-    .eq('id', userId)
-    .single()
-
-  return data?.role ?? null
-}
-
 export default async function AdminLayout({
   children,
 }: {
@@ -25,16 +13,9 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 🔐 BELUM LOGIN
+  // 🔐 Belum login → paksa ke login
   if (!user) {
     redirect('/auth/login?redirect=/admin')
-  }
-
-  // 🔐 CEK ROLE
-  const role = await getRole(user.id)
-
-  if (role !== 'admin') {
-    redirect('/') // bukan admin
   }
 
   return (
@@ -42,25 +23,56 @@ export default async function AdminLayout({
       {/* Sidebar */}
       <aside className="w-56 bg-[#111827] text-white shrink-0 flex flex-col">
         <div className="px-5 py-4 border-b border-white/10">
-          <Link href="/" className="font-label text-[16px] font-bold text-aceh-green">
+          <Link
+            href="/"
+            className="font-label text-[16px] font-bold text-aceh-green tracking-[0.5px]"
+          >
             Berita Meureno
           </Link>
-          <p className="text-[10px] text-white/40 mt-0.5 uppercase">Admin Panel</p>
+          <p className="text-[10px] text-white/40 mt-0.5 uppercase tracking-wider">
+            Admin Panel
+          </p>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          <Link href="/admin">📊 Dashboard</Link>
-          <Link href="/admin/posts">📰 Artikel</Link>
-          <Link href="/admin/posts/new">➕ Tulis</Link>
-          <Link href="/admin/categories">🏷 Kategori</Link>
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
+          {[
+            { label: '📊 Dashboard', href: '/admin' },
+            { label: '📰 Artikel', href: '/admin/posts' },
+            { label: '➕ Tulis Artikel', href: '/admin/posts/new' },
+            { label: '🏷 Kategori', href: '/admin/categories' },
+            { label: '💬 Komentar', href: '/admin/comments' },
+            { label: '📢 Breaking News', href: '/admin/breaking' },
+          ].map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center gap-2 px-3 py-2 rounded text-[13px]
+                         text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
 
         <div className="px-5 py-4 border-t border-white/10">
-          <p className="text-[11px] text-white/40 truncate">{user.email}</p>
+          <p className="text-[11px] text-white/40 truncate mb-2">
+            {user.email}
+          </p>
+
+          {/* Logout */}
+          <form action="/auth/signout" method="POST">
+            <button
+              className="w-full text-left text-[12px] text-white/50
+                         hover:text-aceh-red transition-colors"
+            >
+              Keluar →
+            </button>
+          </form>
         </div>
       </aside>
 
-      <main className="flex-1 p-8">{children}</main>
+      {/* Main Content */}
+      <main className="flex-1 p-8 overflow-auto">{children}</main>
     </div>
   )
 }
