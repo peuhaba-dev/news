@@ -10,13 +10,27 @@ export default async function AdminLayout({
   const supabase = await createServerSupabaseClient()
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  data: { user },
+} = await supabase.auth.getUser()
 
-  // 🔐 Belum login → paksa ke login
-  if (!user) {
-    redirect('/auth/login?redirect=/admin')
-  }
+// 🔐 belum login
+if (!user) {
+  redirect('/auth/login?redirect=/admin')
+}
+
+// 🔐 ambil role (pakai cast biar aman TS)
+const { data: roleData } = await supabase
+  .from('berita.user_roles')
+  .select('role')
+  .eq('id', user.id)
+  .single()
+
+const role = (roleData as { role: string } | null)?.role
+
+// 🔐 bukan admin
+if (role !== 'admin') {
+  redirect('/')
+}
 
   return (
     <div className="min-h-screen bg-surface flex">
