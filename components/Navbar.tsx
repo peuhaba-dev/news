@@ -29,6 +29,7 @@ export default function Navbar({ categories }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [authReady, setAuthReady] = useState(false)
 
   const supabase = createBrowserSupabaseClient()
 
@@ -39,14 +40,13 @@ export default function Navbar({ categories }: NavbarProps) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // 🔐 Auth state listener (INI YANG PENTING)
+  // 🔐 Auth state listener
   useEffect(() => {
-    // get current user
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user)
+      setAuthReady(true)
     })
 
-    // listen perubahan login/logout
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null)
@@ -60,6 +60,7 @@ export default function Navbar({ categories }: NavbarProps) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
+    setMobileOpen(false)
     router.push('/')
     router.refresh()
   }
@@ -132,49 +133,94 @@ export default function Navbar({ categories }: NavbarProps) {
             🔍
           </Link>
 
-          {/* 🔐 AUTH BUTTON */}
-          {!user ? (
-            <Link
-              href="/auth/login"
-              className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold"
-            >
-              Masuk
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/admin"
-                className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold"
-              >
-                Dashboard
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                className="font-label text-[12px] px-4 py-1.5 border border-border rounded"
-              >
-                Logout
-              </button>
-            </>
+          {/* 🔐 AUTH BUTTON — Desktop */}
+          {authReady && (
+            <div className="hidden sm:flex items-center gap-2">
+              {!user ? (
+                <Link
+                  href="/auth/login"
+                  className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold
+                             hover:bg-aceh-green-dark transition-colors"
+                >
+                  Masuk
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/admin"
+                    className="font-label text-[12px] px-4 py-1.5 bg-aceh-green text-white rounded font-semibold
+                               hover:bg-aceh-green-dark transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="font-label text-[12px] px-4 py-1.5 border border-border rounded
+                               hover:bg-gray-50 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
           )}
 
-          {/* Mobile */}
+          {/* Mobile hamburger */}
           <button
-            className="lg:hidden p-1.5"
+            className="lg:hidden p-1.5 text-ink-mid"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            ☰
+            {mobileOpen ? '✕' : '☰'}
           </button>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-t px-5 py-3">
+        <div className="lg:hidden bg-white border-t px-5 py-3 shadow-lg">
           {navItems.map(({ label, href }: any) => (
-            <Link key={href} href={href} className="block py-2">
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setMobileOpen(false)}
+              className={`block py-2.5 text-[14px] border-b border-gray-50
+                ${pathname === href ? 'text-aceh-green font-bold' : 'text-ink-mid'}`}
+            >
               {label}
             </Link>
           ))}
+
+          {/* Mobile Auth Buttons */}
+          <div className="mt-3 pt-3 border-t border-border flex flex-col gap-2">
+            {authReady && !user ? (
+              <Link
+                href="/auth/login"
+                onClick={() => setMobileOpen(false)}
+                className="block text-center font-label text-[13px] px-4 py-2.5 bg-aceh-green text-white
+                           rounded font-semibold hover:bg-aceh-green-dark transition-colors"
+              >
+                🔐 Masuk / Login
+              </Link>
+            ) : authReady ? (
+              <>
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center font-label text-[13px] px-4 py-2.5 bg-aceh-green text-white
+                             rounded font-semibold hover:bg-aceh-green-dark transition-colors"
+                >
+                  📊 Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-center font-label text-[13px] px-4 py-2.5 border border-border
+                             rounded hover:bg-gray-50 transition-colors text-ink-mid"
+                >
+                  Logout
+                </button>
+              </>
+            ) : null}
+          </div>
         </div>
       )}
     </nav>
