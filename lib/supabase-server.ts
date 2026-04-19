@@ -17,7 +17,7 @@ export async function createServerSupabaseClient() {
   cookiesToSet: {
     name: string
     value: string
-    options?: Record<string, any>
+    options?: Record<string, unknown>
   }[]
 ) {
           try {

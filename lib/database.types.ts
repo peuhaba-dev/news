@@ -41,6 +41,7 @@ export type Database = {
           category_id: string | null
           author: string
           created_at: string
+          updated_at: string
           views: number
           published: boolean
         }
@@ -48,12 +49,13 @@ export type Database = {
           id?: string
           title: string
           slug: string
-          content: string
-          excerpt: string
+          content?: string
+          excerpt?: string
           featured_image?: string | null
           category_id?: string | null
-          author: string
+          author?: string
           created_at?: string
+          updated_at?: string
           views?: number
           published?: boolean
         }
@@ -67,10 +69,19 @@ export type Database = {
           category_id?: string | null
           author?: string
           created_at?: string
+          updated_at?: string
           views?: number
           published?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       comments: {
         Row: {
@@ -97,7 +108,15 @@ export type Database = {
           approved?: boolean
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       breaking_news: {
         Row: {

@@ -12,11 +12,13 @@ export interface Post {
   content: string
   excerpt: string
   featured_image: string | null
-  category_id: string
+  category_id: string | null
   category?: Category
   author: string
   created_at: string
+  updated_at: string
   views: number
+  published: boolean
 }
 
 export interface Comment {
@@ -24,6 +26,7 @@ export interface Comment {
   post_id: string
   name: string
   content: string
+  approved: boolean
   created_at: string
 }
 
