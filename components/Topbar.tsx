@@ -10,7 +10,7 @@ const MONTHS_ID = [
 ]
 
 function formatDate(date: Date) {
-  return `${DAYS_ID[date.getDay()]}, ${date.getDate()} ${MONTHS_ID[date.getMonth()]} ${date.getFullYear()} · Banda Aceh`
+  return `${DAYS_ID[date.getDay()]}, ${date.getDate()} ${MONTHS_ID[date.getMonth()]} ${date.getFullYear()}`
 }
 
 function formatTime(date: Date) {
@@ -27,40 +27,59 @@ export default function Topbar() {
   }, [])
 
   return (
-    <div className="bg-[#004D2A] text-white/75 text-[11.5px] font-body py-[5px]">
-      <div className="max-w-portal mx-auto px-5 flex items-center justify-between w-full">
+    <div className="bg-[#004D2A] text-white/75 text-[11px] sm:text-[11.5px] font-body py-[5px]">
+      <div className="max-w-portal mx-auto px-4 sm:px-5 flex items-center justify-between w-full gap-2">
 
         {/* Left — Date + Time */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <div className="flex items-center gap-1.5 truncate">
             {/* Calendar icon */}
-            <svg className="w-3 h-3 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="w-3 h-3 opacity-70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="4" width="18" height="18" rx="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
               <line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
-            <span>{now ? formatDate(now) : '...'}</span>
+            <span className="truncate">
+              {now ? (
+                <>
+                  <span className="hidden sm:inline">{formatDate(now)} · Banda Aceh</span>
+                  <span className="sm:hidden">{now.getDate()} {MONTHS_ID[now.getMonth()].slice(0,3)}</span>
+                </>
+              ) : '...'}
+            </span>
           </div>
-          <span className="opacity-40">|</span>
-          <span className="font-semibold text-[#a8d8bc]">
+          <span className="opacity-40 hidden sm:inline">|</span>
+          <span className="font-semibold text-[#a8d8bc] shrink-0">
             {now ? formatTime(now) : '--:--:--'}
           </span>
-          <span className="opacity-40">WIB</span>
+          <span className="opacity-40 shrink-0">WIB</span>
         </div>
 
-        {/* Right — Quick links */}
-        <div className="hidden sm:flex items-center gap-3.5">
+        {/* Right — Quick links — visible on ALL screens */}
+        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
           {[
-            { label: 'Cuaca Aceh', href: '/cuaca' },
-            { label: 'Jadwal Shalat', href: '/shalat' },
+            { label: '🌤️', labelFull: 'Cuaca Aceh', href: '/cuaca' },
+            { label: '🕌', labelFull: 'Jadwal Shalat', href: '/shalat' },
+          ].map(({ label, labelFull, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="hover:text-aceh-gold transition-colors duration-150 flex items-center gap-1"
+            >
+              <span>{label}</span>
+              <span className="hidden sm:inline">{labelFull}</span>
+            </Link>
+          ))}
+          {/* Desktop-only links */}
+          {[
             { label: 'Tentang Kami', href: '/tentang' },
             { label: 'Iklan', href: '/iklan' },
           ].map(({ label, href }) => (
             <Link
-              key={label}
+              key={href}
               href={href}
-              className="hover:text-aceh-gold transition-colors duration-150"
+              className="hidden md:inline hover:text-aceh-gold transition-colors duration-150"
             >
               {label}
             </Link>
