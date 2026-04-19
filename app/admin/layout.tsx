@@ -1,65 +1,129 @@
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { createServerSupabaseClient } from '@/lib/supabase-server'
+'use client'
 
-export default async function AdminLayout({
+import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createServerSupabaseClient()
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login')
-
-  const role = user.user_metadata?.role
-  if (role !== 'admin') redirect('/')
+  const menu = [
+    { label: 'Dashboard', href: '/admin', icon: '📊' },
+    { label: 'Artikel', href: '/admin/posts', icon: '📰' },
+    { label: 'Tulis', href: '/admin/posts/new', icon: '➕' },
+    { label: 'Kategori', href: '/admin/categories', icon: '🏷' },
+    { label: 'Komentar', href: '/admin/comments', icon: '💬' },
+  ]
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="min-h-screen flex bg-gray-50">
+
+      {/* MOBILE OVERLAY */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+        />
+      )}
 
       {/* SIDEBAR */}
-      <aside className="w-64 bg-[#0f172a] text-white flex flex-col">
-        <div className="px-6 py-5 border-b border-white/10">
-          <h1 className="text-lg font-bold text-aceh-green">
-            CMS Meureno
-          </h1>
+      <aside
+        className={`
+          fixed lg:static z-50
+          top-0 left-0 h-full
+          w-64 lg:w-56
+          bg-[#111827] text-white
+          transform transition-transform duration-200
+
+          ${open ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0
+        `}
+      >
+        {/* BRAND */}
+        <div className="px-4 py-4 border-b border-white/10 flex items-center justify-between">
+          <Link href="/admin" className="font-bold text-sm text-aceh-green">
+            Berita Meureno
+          </Link>
+
+          {/* CLOSE MOBILE */}
+          <button
+            onClick={() => setOpen(false)}
+            className="lg:hidden text-white/70"
+          >
+            ✕
+          </button>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1 text-sm">
-          <Link href="/admin" className="block px-3 py-2 rounded hover:bg-white/10">📊 Dashboard</Link>
-          <Link href="/admin/posts" className="block px-3 py-2 rounded hover:bg-white/10">📰 Artikel</Link>
-          <Link href="/admin/posts/new" className="block px-3 py-2 rounded hover:bg-white/10">➕ Tulis Artikel</Link>
-          <Link href="/admin/categories" className="block px-3 py-2 rounded hover:bg-white/10">🏷 Kategori</Link>
-          <Link href="/admin/comments" className="block px-3 py-2 rounded hover:bg-white/10">💬 Komentar</Link>
-          <Link href="/admin/breaking" className="block px-3 py-2 rounded hover:bg-white/10">📢 Breaking</Link>
+        {/* MENU */}
+        <nav className="p-2 space-y-1">
+          {menu.map((item) => {
+            const active = pathname === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`
+                  flex items-center gap-2 px-3 py-2 rounded-md text-sm
+                  transition-all
+
+                  ${active
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'}
+                `}
+              >
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            )
+          })}
         </nav>
 
-        <div className="p-4 border-t border-white/10 text-xs text-white/50">
-          {user.email}
+        {/* FOOTER */}
+        <div className="mt-auto p-4 border-t border-white/10">
           <form action="/auth/signout" method="POST">
-            <button className="block mt-2 text-red-400 hover:underline">
-              Logout
+            <button className="text-xs text-white/50 hover:text-red-400">
+              Logout →
             </button>
           </form>
         </div>
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-h-screen">
 
-        {/* HEADER */}
-        <header className="h-14 bg-white border-b flex items-center justify-between px-6">
-          <h2 className="font-semibold text-gray-700">Admin Panel</h2>
+        {/* TOPBAR */}
+        <header className="h-14 bg-white border-b flex items-center px-4 justify-between">
+
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setOpen(true)}
+              className="lg:hidden text-gray-600"
+            >
+              ☰
+            </button>
+
+            <h1 className="text-sm font-semibold text-gray-700">
+              Admin Panel
+            </h1>
+          </div>
+
+          {/* RIGHT */}
+          <div className="text-xs text-gray-400">
+            CMS v1.0
+          </div>
         </header>
 
         {/* CONTENT */}
-        <main className="p-6">
+        <main className="p-4 sm:p-6">
           {children}
         </main>
+
       </div>
     </div>
   )
