@@ -58,12 +58,12 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── Top ad banner ── */}
-      <div className="max-w-portal mx-auto px-5 mt-4">
+      <div className="max-w-portal mx-auto px-4 sm:px-5 mt-3 sm:mt-4">
         <AdSlot slot="top" />
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-portal mx-auto px-5">
+      <div className="max-w-portal mx-auto px-4 sm:px-5">
         <Hero mainPost={heroMain} thumbPosts={heroThumbs} />
       </div>
 
@@ -71,17 +71,17 @@ export default async function HomePage() {
       <div className="aceh-pattern-strip my-2" />
 
       {/* ── Aceh Terkini Featured Banner ── */}
-      <div className="max-w-portal mx-auto px-5 mb-6">
+      <div className="max-w-portal mx-auto px-4 sm:px-5 mb-6">
         <div className="bg-aceh-green rounded-lg overflow-hidden">
-          <div className="flex items-center gap-2.5 px-5 py-2.5 border-b border-white/20">
-            <div className="font-label text-[15px] tracking-[1px] text-white font-bold uppercase">
+          <div className="flex items-center gap-2.5 px-4 sm:px-5 py-2.5 border-b border-white/20">
+            <div className="font-label text-sm sm:text-[15px] tracking-[1px] text-white font-bold uppercase">
               🏛 Aceh Terkini
             </div>
             <span className="bg-aceh-gold text-ink font-label text-[10px] tracking-[1px] px-2 py-0.5 rounded-[3px] font-bold">
               LIVE UPDATE
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/20">
             {featured.map((post: any) => (
               <Link
                 key={post.id}
@@ -91,7 +91,7 @@ export default async function HomePage() {
                 <div className="font-label text-[10px] tracking-[1px] text-aceh-gold uppercase font-semibold mb-1">
                   {post.category?.name ?? 'Aceh'}
                 </div>
-                <h3 className="font-head text-[14px] font-bold text-white leading-[1.35] mb-1.5">
+                <h3 className="font-head text-sm sm:text-[14px] font-bold text-white leading-[1.35] mb-1.5">
                   {post.title}
                 </h3>
                 <p className="text-[11px] text-white/60">{formatDate(post.created_at)}</p>
@@ -102,14 +102,11 @@ export default async function HomePage() {
       </div>
 
       {/* ── Main content + Sidebar ── */}
-      <div
-        className="max-w-portal mx-auto px-5 grid gap-7"
-        style={{ gridTemplateColumns: 'minmax(0,1fr) 320px' }}
-      >
+      <div className="max-w-portal mx-auto px-4 sm:px-5 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 lg:gap-7">
         {/* LEFT COLUMN */}
         <div>
           {/* Section: Berita Terbaru */}
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <SectionHeader title="Berita Terbaru" href="/category/semua" />
 
             {/* Big feature card */}
@@ -127,26 +124,26 @@ export default async function HomePage() {
           </div>
 
           {/* Divider */}
-          <hr className="border-border my-7" />
+          <hr className="border-border my-6 sm:my-7" />
 
           {/* Section: Wisata Aceh */}
           <div className="mb-8">
             <SectionHeader title="Wisata Aceh" emoji="🌿" href="/category/wisata" />
-            <div className="grid grid-cols-3 gap-3 max-sm:grid-cols-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {WISATA.map(({ name, loc, gradient }) => (
                 <Link
                   key={name}
                   href={`/tag/${name.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="relative rounded-lg overflow-hidden h-40 cursor-pointer block group"
+                  className="relative rounded-lg overflow-hidden h-36 sm:h-40 cursor-pointer block group"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
-                    <p className="font-head text-[13px] font-bold text-white leading-[1.25]
+                    <p className="font-head text-xs sm:text-[13px] font-bold text-white leading-[1.25]
                                   group-hover:text-aceh-gold transition-colors">
                       {name}
                     </p>
-                    <p className="text-[10.5px] text-white/75 mt-0.5">{loc}</p>
+                    <p className="text-[10px] sm:text-[10.5px] text-white/75 mt-0.5">{loc}</p>
                   </div>
                 </Link>
               ))}
@@ -156,18 +153,16 @@ export default async function HomePage() {
           {/* Section: Religi & Budaya */}
           <div>
             <SectionHeader title="Religi & Budaya Aceh" emoji="☪" href="/category/religi" />
-            <div className="grid grid-cols-4 gap-4 max-md:grid-cols-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {latest.slice(4, 8).map((post: any, i: number) => (
                 <Link
                   key={post.id}
                   href={`/news/${post.slug}`}
                   className="group cursor-pointer block"
                 >
-                  <div
-                    className="h-[140px] rounded-md overflow-hidden relative mb-2"
-                  >
+                  <div className="h-[120px] sm:h-[140px] rounded-md overflow-hidden relative mb-2">
                     {post.featured_image ? (
-                      <Image src={post.featured_image} alt={post.title} fill className="object-cover" sizes="25vw" />
+                      <Image src={post.featured_image} alt={post.title} fill className="object-cover" sizes="(max-width: 640px) 50vw, 25vw" />
                     ) : (
                       <div className={`absolute inset-0 bg-gradient-to-br ${
                         ['from-[#1a4a0a] to-[#2e8b2e]','from-[#2a1a3e] to-[#4a3a7e]',
@@ -178,8 +173,8 @@ export default async function HomePage() {
                   <p className="font-label text-[10px] tracking-[0.8px] text-aceh-green uppercase font-bold mb-1">
                     {post.category?.name ?? 'Religi'} · Banda Aceh
                   </p>
-                  <h4 className="font-head text-[14px] font-bold text-ink leading-[1.3]
-                                 group-hover:text-aceh-green transition-colors">
+                  <h4 className="font-head text-[13px] sm:text-[14px] font-bold text-ink leading-[1.3]
+                                 group-hover:text-aceh-green transition-colors line-clamp-2">
                     {post.title}
                   </h4>
                   <p className="text-[11px] text-ink-soft mt-1">{formatDate(post.created_at)}</p>
