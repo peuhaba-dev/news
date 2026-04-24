@@ -85,11 +85,9 @@ export default function AdminLayout({
 
         {/* FOOTER */}
         <div className="mt-auto p-4 border-t border-white/10">
-          <form action="/auth/signout" method="POST">
-            <button className="text-xs text-white/50 hover:text-red-400">
-              Logout →
-            </button>
-          </form>
+          <a href="/api/admin/logout" className="text-xs text-white/50 hover:text-red-400 block">
+            Logout →
+          </a>
         </div>
       </aside>
 
