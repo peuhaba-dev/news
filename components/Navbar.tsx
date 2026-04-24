@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import type { Category } from '@/types'
-import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 
 const NAV_ITEMS = [
   { label: 'Beranda', href: '/' },
@@ -24,208 +23,59 @@ interface NavbarProps {
 
 export default function Navbar({ categories }: NavbarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const [authReady, setAuthReady] = useState(false)
 
-  const supabase = createBrowserSupabaseClient()
-
-  // Scroll effect
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // 🔐 Auth state listener
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user)
-      setAuthReady(true)
-    })
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
-      }
-    )
-
-    return () => {
-      listener.subscription.unsubscribe()
-    }
-  }, [supabase])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setMobileOpen(false)
-    router.push('/')
-    router.refresh()
-  }
-
-  const navItems =
-    categories && categories.length > 0
-      ? [
-          { label: 'Beranda', href: '/' },
-          ...categories.map((c) => ({
-            label: c.name,
-            href: `/category/${c.slug}`,
-          })),
-        ]
-      : NAV_ITEMS
+  const navItems = categories && categories.length > 0
+    ? [{ label: 'Beranda', href: '/' }, ...categories.map((c) => ({ label: c.name, href: `/category/${c.slug}` }))]
+    : NAV_ITEMS
 
   return (
-    <nav
-      className={`sticky top-0 z-50 bg-white border-b-[3px] border-aceh-green
-                  transition-shadow duration-200
-                  ${scrolled
-                    ? 'shadow-[0_4px_20px_rgba(0,0,0,0.12)]'
-                    : 'shadow-[0_2px_12px_rgba(0,0,0,0.08)]'}`}
-    >
+    <nav className={`sticky top-0 z-50 bg-white border-b-[3px] border-aceh-green transition-shadow duration-200 ${scrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,0.12)]' : 'shadow-[0_2px_12px_rgba(0,0,0,0.08)]'}`}>
       <div className="max-w-portal mx-auto px-4 sm:px-5 flex items-center h-14 gap-4 sm:gap-8">
-
-        {/* Brand */}
         <Link href="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 bg-aceh-green rounded-md flex items-center justify-center">
             <svg className="w-5 h-5 sm:w-[22px] sm:h-[22px] fill-white" viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9
-                       2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
             </svg>
           </div>
           <div className="leading-none hidden xs:block">
-            <div className="font-label text-[17px] sm:text-[20px] font-bold text-aceh-green tracking-[0.5px]">
-              Berita Meureno
-            </div>
+            <div className="font-label text-[17px] sm:text-[20px] font-bold text-aceh-green tracking-[0.5px]">Berita Meureno</div>
           </div>
         </Link>
-
-        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-0.5 flex-1">
           {navItems.map(({ label, href, accent, hot }: any) => {
             const active = pathname === href
             return (
-              <Link
-                key={href}
-                href={href}
-                className={`font-label text-[13px] font-medium px-3 py-1.5 rounded
-                  ${hot
-                    ? 'text-aceh-red'
-                    : active || accent
-                      ? 'text-aceh-green font-bold'
-                      : 'text-ink-mid hover:text-aceh-green hover:bg-aceh-green-light'}`}
-              >
+              <Link key={href} href={href}
+                className={`font-label text-[13px] font-medium px-3 py-1.5 rounded ${hot ? 'text-aceh-red' : active || accent ? 'text-aceh-green font-bold' : 'text-ink-mid hover:text-aceh-green hover:bg-aceh-green-light'}`}>
                 {label}
               </Link>
             )
           })}
         </div>
-
-        {/* Actions — ALWAYS visible */}
         <div className="flex items-center gap-2 ml-auto shrink-0">
-
-          {/* 🔍 Search */}
-          <Link
-            href="/search"
-            className="p-1.5 text-ink-mid rounded hover:text-aceh-green hover:bg-aceh-green-light"
-          >
-            🔍
-          </Link>
-
-          {/* 🔐 AUTH BUTTONS — visible on ALL screen sizes */}
-          {authReady && (
-            <>
-              {!user ? (
-                <Link
-                  href="/auth/login"
-                  className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white
-                             rounded font-semibold hover:bg-aceh-green-dark transition-colors"
-                >
-                  Masuk
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/admin"
-                    className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white
-                               rounded font-semibold hover:bg-aceh-green-dark transition-colors"
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="hidden sm:inline-block font-label text-[12px] px-4 py-1.5 border border-border
-                               rounded hover:bg-gray-50 transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              )}
-            </>
-          )}
-
-          {/* Mobile hamburger */}
-          <button
-            className="lg:hidden p-1.5 text-ink-mid text-lg"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
+          <Link href="/search" className="p-1.5 text-ink-mid rounded hover:text-aceh-green hover:bg-aceh-green-light">🔍</Link>
+          <Link href="/admin" className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white rounded font-semibold hover:bg-aceh-green-dark transition-colors">Admin</Link>
+          <button className="lg:hidden p-1.5 text-ink-mid text-lg" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? '✕' : '☰'}
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="lg:hidden bg-white border-t px-5 py-3 shadow-lg max-h-[80vh] overflow-y-auto">
-          {/* Nav links */}
           {navItems.map(({ label, href }: any) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              className={`block py-2.5 text-[14px] border-b border-gray-50
-                ${pathname === href ? 'text-aceh-green font-bold' : 'text-ink-mid'}`}
-            >
+            <Link key={href} href={href} onClick={() => setMobileOpen(false)}
+              className={`block py-2.5 text-[14px] border-b border-gray-50 ${pathname === href ? 'text-aceh-green font-bold' : 'text-ink-mid'}`}>
               {label}
             </Link>
           ))}
-
-          {/* Quick links — Cuaca, Shalat, dll */}
-          <div className="mt-3 pt-3 border-t border-border">
-            <p className="text-[10px] text-ink-soft font-semibold uppercase tracking-wider mb-2">Layanan</p>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: '🌤️ Cuaca Aceh', href: '/cuaca' },
-                { label: '🕌 Jadwal Shalat', href: '/shalat' },
-                { label: 'ℹ️ Tentang Kami', href: '/tentang' },
-                { label: '📢 Iklan', href: '/iklan' },
-              ].map(({ label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-[13px] text-ink-mid bg-gray-50 rounded-lg px-3 py-2.5 text-center
-                             hover:bg-aceh-green-light hover:text-aceh-green transition-colors"
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Auth in mobile */}
-          {authReady && user && (
-            <div className="mt-3 pt-3 border-t border-border">
-              <button
-                onClick={handleLogout}
-                className="w-full text-center font-label text-[13px] px-4 py-2.5 border border-red-200
-                           text-red-600 rounded hover:bg-red-50 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          )}
         </div>
       )}
     </nav>

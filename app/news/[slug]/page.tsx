@@ -238,7 +238,7 @@ export default async function ArticlePage({
             {related.length > 0 && (
               <div className="mt-8">
                 <SectionHeader title="Berita Terkait" />
-                {related.map((p, i) => (
+                {related.map((p: any, i: number) => (
                   <NewsCard key={p.id} post={p} index={i} />
                 ))}
               </div>
