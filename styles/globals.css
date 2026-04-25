@@ -16,3 +16,27 @@
   --border:           #E5E7EB;
   --surface:          #F9FAFB;
 }
+
+/* ─── Ticker Animation ───────────────────────────── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-animate {
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-animate:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Blink Animation ────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s ease-in-out infinite;
+}
