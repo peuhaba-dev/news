@@ -59,7 +59,7 @@ export default async function RootLayout({
   ])
 
   return (
-    <html lang="id">
+    <html lang="id" suppressHydrationWarning>
       <head>
         {/* Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
@@ -70,7 +70,7 @@ export default async function RootLayout({
           />
         )}
       </head>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         {/* Google Analytics */}
         <GoogleAnalytics />
 
