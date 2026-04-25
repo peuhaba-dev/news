@@ -26,9 +26,9 @@ const FOOTER_COLS = [
   {
     title: 'Tentang Kami',
     links: [
-      { label: 'Redaksi', href: '/redaksi' },
-      { label: 'Pedoman Media Siber', href: '/pedoman' },
-      { label: 'Kebijakan Privasi', href: '/privasi' },
+      { label: 'Redaksi', href: '/tentang' },
+      { label: 'Pedoman Media Siber', href: '/disclaimer' },
+      { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
       { label: 'Pasang Iklan', href: '/iklan' },
       { label: 'Karier', href: '/karier' },
       { label: 'Hubungi Kami', href: '/kontak' },
@@ -138,8 +138,8 @@ export default function Footer() {
             </p>
             <div className="flex gap-4 flex-wrap justify-center">
               {[
-                { label: 'Syarat & Ketentuan', href: '/syarat' },
-                { label: 'Kebijakan Privasi', href: '/privasi' },
+                { label: 'Syarat & Ketentuan', href: '/disclaimer' },
+                { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
                 { label: 'Peta Situs', href: '/sitemap.xml' },
                 { label: 'robots.txt', href: '/robots.txt' },
               ].map(({ label, href }) => (
