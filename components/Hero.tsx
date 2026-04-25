@@ -20,15 +20,15 @@ export default function Hero({ mainPost, thumbPosts }: HeroProps) {
 
   return (
     <section className="py-5">
+      {/* Mobile: stacked, Desktop: 2col grid */}
       <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: '2fr 1fr', gridTemplateRows: '340px 180px' }}
+        className="grid gap-3 grid-cols-1 md:grid-cols-[2fr_1fr] md:grid-rows-[340px_180px]"
       >
         {/* ── Main hero ── */}
         <Link
           href={`/news/${mainPost.slug}`}
-          className="relative rounded-lg overflow-hidden cursor-pointer col-span-1 row-span-2
-                     max-md:col-span-full max-md:row-span-1 max-md:h-[340px]"
+          className="relative rounded-lg overflow-hidden cursor-pointer
+                     h-[280px] md:h-auto md:col-span-1 md:row-span-2"
         >
           {mainPost.featured_image ? (
             <Image
@@ -80,7 +80,7 @@ export default function Hero({ mainPost, thumbPosts }: HeroProps) {
           <Link
             href={`/news/${thumb1.slug}`}
             className="relative rounded-lg overflow-hidden cursor-pointer
-                       max-md:col-span-full max-md:h-[200px]"
+                       h-[180px] md:h-auto"
           >
             {thumb1.featured_image ? (
               <Image
@@ -110,7 +110,7 @@ export default function Hero({ mainPost, thumbPosts }: HeroProps) {
           <Link
             href={`/news/${thumb2.slug}`}
             className="relative rounded-lg overflow-hidden cursor-pointer
-                       max-md:col-span-full max-md:h-[200px]"
+                       h-[180px] md:h-auto"
           >
             {thumb2.featured_image ? (
               <Image

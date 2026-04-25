@@ -23,12 +23,11 @@ export default function NewsCard({ post, index = 0 }: NewsCardProps) {
   return (
     <Link
       href={`/news/${post.slug}`}
-      className="grid gap-3.5 py-4 border-b border-border last:border-b-0
+      className="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] gap-3.5 py-4 border-b border-border last:border-b-0
                  hover:opacity-80 transition-opacity duration-150 cursor-pointer group"
-      style={{ gridTemplateColumns: '140px 1fr' }}
     >
       {/* Thumbnail */}
-      <div className="w-[140px] h-[95px] rounded-md overflow-hidden shrink-0 relative">
+      <div className="h-[95px] rounded-md overflow-hidden shrink-0 relative">
         {post.featured_image ? (
           <Image
             src={post.featured_image}

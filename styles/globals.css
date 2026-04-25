@@ -6,22 +6,24 @@
 
 /* ─── CSS Custom Properties ──────────────────────── */
 :root {
-  --aceh-green:       #00703C;
-  --aceh-green-dark:  #004D2A;
+  --aceh-green: #00703C;
+  --aceh-green-dark: #004D2A;
   --aceh-green-light: #e8f5ee;
-  --aceh-red:         #C8102E;
-  --aceh-gold:        #C9941A;
-  --aceh-gold-light:  #fff8e6;
-  --ink:              #111827;
-  --ink-mid:          #374151;
-  --ink-soft:         #6B7280;
-  --border:           #E5E7EB;
-  --surface:          #F9FAFB;
+  --aceh-red: #C8102E;
+  --aceh-gold: #C9941A;
+  --aceh-gold-light: #fff8e6;
+  --ink: #111827;
+  --ink-mid: #374151;
+  --ink-soft: #6B7280;
+  --border: #E5E7EB;
+  --surface: #F9FAFB;
 }
 
 /* ─── Base Reset ─────────────────────────────────── */
 @layer base {
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
 
   body {
     font-family: 'Source Sans 3', system-ui, sans-serif;
@@ -30,50 +32,81 @@
     overflow-x: hidden;
   }
 
-  a { text-decoration: none; color: inherit; }
-  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* ─── Typography helpers ─────────────────────────── */
 @layer utilities {
-  .font-head    { font-family: 'Playfair Display', Georgia, serif; }
-  .font-label   { font-family: 'Oswald', sans-serif; }
-  .font-body    { font-family: 'Source Sans 3', system-ui, sans-serif; }
+  .font-head {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-label {
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .font-body {
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+  }
 }
 
 /* ─── Breaking ticker animation ──────────────────── */
 @keyframes ticker {
-  0%   { transform: translateX(100vw); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100vw);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
-.ticker-animate { animation: ticker 35s linear infinite; }
+
+.ticker-animate {
+  animation: ticker 35s linear infinite;
+}
 
 /* ─── Blink animation (ticker dot) ──────────────── */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
-.blink { animation: blink 1s infinite; }
+
+.blink {
+  animation: blink 1s infinite;
+}
 
 /* ─── Acehnese pattern strip ─────────────────────── */
 .aceh-pattern-strip {
   height: 5px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--aceh-green)  0px,  var(--aceh-green)  20px,
-    var(--aceh-gold)   20px, var(--aceh-gold)   24px,
-    var(--aceh-green)  24px, var(--aceh-green)  44px,
-    white              44px, white              48px
-  );
+  background: repeating-linear-gradient(90deg,
+      var(--aceh-green) 0px, var(--aceh-green) 20px,
+      var(--aceh-gold) 20px, var(--aceh-gold) 24px,
+      var(--aceh-green) 24px, var(--aceh-green) 44px,
+      white 44px, white 48px);
 }
+
 .aceh-pride-strip {
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--aceh-green) 0%,   var(--aceh-green) 60%,
-    var(--aceh-gold)  60%,  var(--aceh-gold)  80%,
-    white             80%,  white             100%
-  );
+  background: linear-gradient(90deg,
+      var(--aceh-green) 0%, var(--aceh-green) 60%,
+      var(--aceh-gold) 60%, var(--aceh-gold) 80%,
+      white 80%, white 100%);
 }
 
 /* ─── Section header underline ───────────────────── */
@@ -81,11 +114,14 @@
   border-bottom: 3px solid var(--border);
   position: relative;
 }
+
 .sec-head-border::after {
   content: '';
   position: absolute;
-  bottom: -3px; left: 0;
-  width: 80px; height: 3px;
+  bottom: -3px;
+  left: 0;
+  width: 80px;
+  height: 3px;
   background: var(--aceh-green);
 }
 
@@ -95,6 +131,7 @@
   transform: translateY(18px);
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
+
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
@@ -107,9 +144,15 @@
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
 }
+
 @keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ─── Prose styles for article content ───────────── */
@@ -119,7 +162,11 @@
   line-height: 1.8;
   color: var(--ink);
 }
-.article-content p  { margin-bottom: 1.25rem; }
+
+.article-content p {
+  margin-bottom: 1.25rem;
+}
+
 .article-content h2 {
   font-family: 'Playfair Display', serif;
   font-size: 22px;
@@ -127,12 +174,14 @@
   margin: 2rem 0 1rem;
   color: var(--ink);
 }
+
 .article-content h3 {
   font-family: 'Playfair Display', serif;
   font-size: 18px;
   font-weight: 700;
   margin: 1.5rem 0 0.75rem;
 }
+
 .article-content blockquote {
   border-left: 4px solid var(--aceh-green);
   background: var(--aceh-green-light);
@@ -143,8 +192,14 @@
 }
 
 /* ─── Scrollbar hide utility ─────────────────────── */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 /* ─── Article internal links ─────────────────────── */
 .article-content a {
@@ -152,6 +207,7 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
 .article-content a:hover {
   color: var(--aceh-green-dark);
 }
@@ -161,6 +217,7 @@
   outline: none;
   min-height: 300px;
 }
+
 .tiptap p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   color: #9CA3AF;
@@ -168,26 +225,31 @@
   float: left;
   height: 0;
 }
+
 .tiptap h2 {
   font-family: 'Playfair Display', serif;
   font-size: 22px;
   font-weight: 700;
   margin: 1.5rem 0 0.75rem;
 }
+
 .tiptap h3 {
   font-family: 'Playfair Display', serif;
   font-size: 18px;
   font-weight: 700;
   margin: 1rem 0 0.5rem;
 }
+
 .tiptap p {
   margin-bottom: 0.75rem;
 }
+
 .tiptap ul,
 .tiptap ol {
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
 }
+
 .tiptap blockquote {
   border-left: 4px solid var(--aceh-green);
   background: var(--aceh-green-light);
@@ -196,6 +258,7 @@
   border-radius: 0 6px 6px 0;
   font-style: italic;
 }
+
 .tiptap img {
   max-width: 100%;
   height: auto;
