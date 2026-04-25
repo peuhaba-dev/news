@@ -3,6 +3,7 @@
 import { useState, useEffect, useTransition } from 'react'
 import { useParams } from 'next/navigation'
 import { updatePost } from '@/lib/actions'
+import { useAuth } from '@/components/admin/AuthProvider'
 import dynamic from 'next/dynamic'
 import PostPreview from '@/components/admin/PostPreview'
 
@@ -17,8 +18,10 @@ interface Category { id: string; name: string; slug: string }
 
 export default function EditPostPage() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
 
   const [loading, setLoading]         = useState(true)
+  const [notAllowed, setNotAllowed]   = useState(false)
   const [categories, setCategories]   = useState<Category[]>([])
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isPending, startTransition]  = useTransition()
@@ -42,6 +45,13 @@ export default function EditPostPage() {
       const post = await postRes.json()
       const cats = await catRes.json()
 
+      // Check if WRITER is editing someone else's post
+      if (user?.role === 'WRITER' && post.author !== user.name && post.authorId !== user.id) {
+        setNotAllowed(true)
+        setLoading(false)
+        return
+      }
+
       setTitle(post.title ?? '')
       setExcerpt(post.excerpt ?? '')
       setContent(post.content ?? '')
@@ -52,8 +62,8 @@ export default function EditPostPage() {
       setCategories(Array.isArray(cats) ? cats : [])
       setLoading(false)
     }
-    load()
-  }, [id])
+    if (user) load()
+  }, [id, user])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -91,11 +101,22 @@ export default function EditPostPage() {
     )
   }
 
+  if (notAllowed) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center">
+        <p className="text-4xl mb-3">🔒</p>
+        <p className="text-gray-600 font-semibold">Akses Ditolak</p>
+        <p className="text-sm text-gray-400 mt-1">Anda hanya bisa mengedit artikel yang Anda tulis.</p>
+        <a href="/admin/posts" className="inline-block mt-4 text-emerald-600 hover:underline text-sm">← Kembali ke daftar artikel</a>
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-head text-2xl sm:text-[28px] font-bold text-ink">Edit Artikel</h1>
-        <a href="/admin/posts" className="text-sm text-ink-soft hover:text-ink">← Kembali</a>
+        <a href="/admin/posts" className="text-sm text-gray-400 hover:text-gray-600">← Kembali</a>
       </div>
 
       {submitError && (
@@ -163,7 +184,7 @@ export default function EditPostPage() {
 
         <div className="flex items-center gap-3">
           <input type="checkbox" id="published" checked={published} onChange={(e) => setPublished(e.target.checked)}
-            className="w-4 h-4 accent-aceh-green" />
+            className="w-4 h-4 accent-emerald-600" />
           <label htmlFor="published" className="text-[13px] font-medium text-ink-mid cursor-pointer">
             Tayangkan artikel
           </label>
@@ -171,17 +192,17 @@ export default function EditPostPage() {
 
         <div className="flex gap-3 pt-4 border-t border-border">
           <button type="submit" disabled={isPending}
-            className="bg-aceh-green text-white font-label font-semibold px-6 py-2.5 rounded hover:bg-aceh-green-dark transition-colors disabled:opacity-60">
+            className="bg-emerald-600 text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-emerald-500 transition-colors disabled:opacity-60 shadow-sm">
             {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
           </button>
           <button
             type="button"
             onClick={() => setShowPreview(true)}
-            className="bg-gray-100 text-ink-mid font-label font-semibold px-5 py-2.5 rounded hover:bg-gray-200 transition-colors text-[13px]"
+            className="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-200 transition-colors text-[13px]"
           >
             👁 Preview
           </button>
-          <a href="/admin/posts" className="text-ink-soft font-label text-[13px] hover:text-ink py-2 ml-auto">Batal</a>
+          <a href="/admin/posts" className="text-gray-400 text-[13px] hover:text-gray-600 py-2 ml-auto">Batal</a>
         </div>
       </form>
 

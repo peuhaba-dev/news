@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition } from 'react'
 import { createPost } from '@/lib/actions'
+import { useAuth } from '@/components/admin/AuthProvider'
 import dynamic from 'next/dynamic'
 import PostPreview from '@/components/admin/PostPreview'
 
@@ -15,18 +16,26 @@ const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 interface Category { id: string; name: string; slug: string }
 
 export default function NewPostPage() {
+  const { user } = useAuth()
   const [categories, setCategories]   = useState<Category[]>([])
   const [loadingCats, setLoadingCats] = useState(true)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isPending, startTransition]  = useTransition()
 
-  // Form state for preview
+  // Form state
   const [title, setTitle]             = useState('')
   const [content, setContent]         = useState('')
   const [excerpt, setExcerpt]         = useState('')
   const [author, setAuthor]           = useState('')
   const [featuredImage, setFeaturedImage] = useState('')
   const [showPreview, setShowPreview] = useState(false)
+
+  // Auto-fill author from logged-in user
+  useEffect(() => {
+    if (user?.name && !author) {
+      setAuthor(user.name)
+    }
+  }, [user])
 
   useEffect(() => {
     fetch(`${API}/api/berita/categories`)
@@ -38,6 +47,10 @@ export default function NewPostPage() {
   async function handleSubmit(formData: FormData) {
     // Inject rich text content
     formData.set('content', content)
+    // Ensure author is set from the user context
+    if (!formData.get('author') && user?.name) {
+      formData.set('author', user.name)
+    }
     setSubmitError(null)
     startTransition(async () => {
       try {
@@ -53,7 +66,10 @@ export default function NewPostPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-      <h1 className="font-head text-2xl sm:text-[28px] font-bold text-ink mb-6">Tulis Artikel Baru</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-head text-2xl sm:text-[28px] font-bold text-ink">Tulis Artikel Baru</h1>
+        <a href="/admin/posts" className="text-sm text-gray-400 hover:text-gray-600">← Kembali</a>
+      </div>
 
       {submitError && (
         <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-5 text-[13px] text-red-700">
@@ -84,7 +100,10 @@ export default function NewPostPage() {
             )}
           </div>
           <div>
-            <label className="block text-[13px] font-semibold text-ink-mid mb-1.5">Penulis <span className="text-aceh-red">*</span></label>
+            <label className="block text-[13px] font-semibold text-ink-mid mb-1.5">
+              Penulis <span className="text-aceh-red">*</span>
+              {user && <span className="text-[11px] text-gray-400 font-normal ml-1">(auto-filled)</span>}
+            </label>
             <input type="text" name="author" required placeholder="Nama penulis"
               value={author} onChange={(e) => setAuthor(e.target.value)}
               className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
@@ -124,24 +143,24 @@ export default function NewPostPage() {
 
         {/* Publish checkbox */}
         <div className="flex items-center gap-3">
-          <input type="checkbox" id="published" name="published" value="true" defaultChecked className="w-4 h-4 accent-aceh-green" />
+          <input type="checkbox" id="published" name="published" value="true" defaultChecked className="w-4 h-4 accent-emerald-600" />
           <label htmlFor="published" className="text-[13px] font-medium text-ink-mid cursor-pointer">Langsung tayangkan artikel</label>
         </div>
 
         {/* Actions */}
         <div className="flex gap-3 pt-4 border-t border-border">
           <button type="submit" disabled={isPending}
-            className="bg-aceh-green text-white font-label font-semibold px-6 py-2.5 rounded hover:bg-aceh-green-dark transition-colors disabled:opacity-60">
+            className="bg-emerald-600 text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-emerald-500 transition-colors disabled:opacity-60 shadow-sm">
             {isPending ? 'Menyimpan...' : 'Simpan & Tayangkan'}
           </button>
           <button
             type="button"
             onClick={() => setShowPreview(true)}
-            className="bg-gray-100 text-ink-mid font-label font-semibold px-5 py-2.5 rounded hover:bg-gray-200 transition-colors text-[13px]"
+            className="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-200 transition-colors text-[13px]"
           >
             👁 Preview
           </button>
-          <a href="/admin/posts" className="text-ink-soft font-label text-[13px] hover:text-ink py-2 ml-auto">Batal</a>
+          <a href="/admin/posts" className="text-gray-400 text-[13px] hover:text-gray-600 py-2 ml-auto">Batal</a>
         </div>
       </form>
 

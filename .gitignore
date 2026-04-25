@@ -40,6 +40,9 @@ next-env.d.ts
 coverage/
 .nyc_output/
 
+# ── CMS Data (user store) ───────────────────
+data/
+
 # ── Misc ────────────────────────────────────
 *.pem
 *.log

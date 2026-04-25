@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useAuth } from '@/components/admin/AuthProvider'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 
@@ -10,6 +11,7 @@ interface Post {
   title: string
   slug: string
   author: string
+  authorId?: string
   views: number
   published: boolean
   createdAt: string
@@ -17,6 +19,7 @@ interface Post {
 }
 
 export default function AdminPostsPage() {
+  const { user } = useAuth()
   const [posts, setPosts]     = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
@@ -27,7 +30,16 @@ export default function AdminPostsPage() {
     setLoading(true)
     const res  = await fetch(`${API}/api/berita/posts?limit=100&published=all`, { cache: 'no-store' })
     const data = await res.json()
-    setPosts(data.posts ?? [])
+    let allPosts = data.posts ?? []
+
+    // WRITER can only see own posts
+    if (user?.role === 'WRITER') {
+      allPosts = allPosts.filter((p: Post) =>
+        p.authorId === user.id || p.author === user.name
+      )
+    }
+
+    setPosts(allPosts)
     setLoading(false)
   }
 
@@ -48,13 +60,25 @@ export default function AdminPostsPage() {
     fetchPosts()
   }
 
+  function canEditPost(post: Post): boolean {
+    if (!user) return false
+    if (user.role === 'SUPER_ADMIN' || user.role === 'EDITOR') return true
+    // WRITER can only edit own posts
+    return post.authorId === user.id || post.author === user.name
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-head text-[28px] font-bold text-ink">Daftar Artikel</h1>
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Daftar Artikel</h1>
+          {user?.role === 'WRITER' && (
+            <p className="text-xs text-gray-400 mt-0.5">Menampilkan artikel Anda saja</p>
+          )}
+        </div>
         <Link href="/admin/posts/new"
-          className="bg-aceh-green text-white font-label text-[13px] font-semibold tracking-[0.5px] px-5 py-2.5 rounded hover:bg-aceh-green-dark transition-colors">
-          + Tulis Artikel
+          className="bg-emerald-600 text-white text-[13px] font-semibold px-5 py-2.5 rounded-lg hover:bg-emerald-500 transition-colors shadow-sm">
+          ✏️ Tulis Artikel
         </Link>
       </div>
 
@@ -65,18 +89,19 @@ export default function AdminPostsPage() {
           ))}
         </div>
       ) : posts.length === 0 ? (
-        <div className="text-center py-16 text-ink-soft">
+        <div className="text-center py-16 text-gray-400">
+          <p className="text-4xl mb-3">📝</p>
           <p className="text-[15px]">Belum ada artikel.</p>
-          <Link href="/admin/posts/new" className="mt-4 inline-block bg-aceh-green text-white font-label text-[13px] px-5 py-2 rounded hover:bg-aceh-green-dark">
-            + Tulis Artikel
+          <Link href="/admin/posts/new" className="mt-4 inline-block bg-emerald-600 text-white text-[13px] px-5 py-2 rounded-lg hover:bg-emerald-500">
+            ✏️ Tulis Artikel
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-border overflow-hidden">
+        <div className="bg-white rounded-xl border overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-[13px]">
               <thead>
-                <tr className="text-ink-soft font-semibold text-left border-b border-border bg-surface">
+                <tr className="text-gray-500 font-semibold text-left border-b bg-gray-50/50">
                   <th className="px-6 py-3">Judul</th>
                   <th className="px-4 py-3">Kategori</th>
                   <th className="px-4 py-3">Penulis</th>
@@ -85,33 +110,42 @@ export default function AdminPostsPage() {
                   <th className="px-4 py-3">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y">
                 {posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-surface transition-colors">
+                  <tr key={post.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-3.5">
-                      <p className="font-head font-bold text-ink line-clamp-1 max-w-[260px]">{post.title}</p>
-                      <p className="text-[11px] text-ink-soft mt-0.5 font-mono">/news/{post.slug}</p>
+                      <p className="font-semibold text-gray-800 line-clamp-1 max-w-[260px]">{post.title}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5 font-mono">/news/{post.slug}</p>
                     </td>
-                    <td className="px-4 py-3.5 text-ink-soft whitespace-nowrap">{post.category?.name ?? '—'}</td>
-                    <td className="px-4 py-3.5 text-ink-soft whitespace-nowrap">{post.author}</td>
-                    <td className="px-4 py-3.5 text-ink-soft whitespace-nowrap">👁 {post.views.toLocaleString('id-ID')}</td>
+                    <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{post.category?.name ?? '—'}</td>
+                    <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{post.author}</td>
+                    <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">👁 {post.views.toLocaleString('id-ID')}</td>
                     <td className="px-4 py-3.5">
-                      <button onClick={() => handleTogglePublish(post.id, post.published)}
-                        className={`inline-block text-[11px] font-label font-bold tracking-[0.5px] px-2 py-0.5 rounded-full cursor-pointer transition-colors ${post.published ? 'bg-aceh-green-light text-aceh-green-dark hover:bg-red-100 hover:text-red-600' : 'bg-gray-100 text-ink-soft hover:bg-aceh-green-light hover:text-aceh-green-dark'}`}>
+                      <button onClick={() => canEditPost(post) && handleTogglePublish(post.id, post.published)}
+                        disabled={!canEditPost(post)}
+                        className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-colors ${
+                          post.published
+                            ? 'bg-emerald-100 text-emerald-600 hover:bg-red-100 hover:text-red-600'
+                            : 'bg-gray-100 text-gray-500 hover:bg-emerald-100 hover:text-emerald-600'
+                        } ${!canEditPost(post) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                         {post.published ? 'Tayang' : 'Draft'}
                       </button>
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2 whitespace-nowrap">
-                        <Link href={`/news/${post.slug}`} target="_blank" className="text-aceh-green hover:underline">Lihat</Link>
-                        <span className="text-border">|</span>
-                        <Link href={`/admin/posts/${post.id}/edit`} className="text-blue-500 hover:underline">Edit</Link>
-                        <span className="text-border">|</span>
-                        <button onClick={() => handleDelete(post.id, post.title)}
-                          disabled={deleting === post.id}
-                          className="text-red-500 hover:underline disabled:opacity-50">
-                          {deleting === post.id ? '...' : 'Hapus'}
-                        </button>
+                        <Link href={`/news/${post.slug}`} target="_blank" className="text-emerald-600 hover:underline">Lihat</Link>
+                        {canEditPost(post) && (
+                          <>
+                            <span className="text-gray-200">|</span>
+                            <Link href={`/admin/posts/${post.id}/edit`} className="text-blue-500 hover:underline">Edit</Link>
+                            <span className="text-gray-200">|</span>
+                            <button onClick={() => handleDelete(post.id, post.title)}
+                              disabled={deleting === post.id}
+                              className="text-red-500 hover:underline disabled:opacity-50">
+                              {deleting === post.id ? '...' : 'Hapus'}
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
