@@ -13,6 +13,9 @@ import NewsCard from '@/components/NewsCard'
 import AdSlot from '@/components/AdSlot'
 import SectionHeader from '@/components/SectionHeader'
 import CommentForm from '@/components/CommentForm'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
+import TableOfContents from '@/components/TableOfContents'
+import ArticleContent from '@/components/ArticleContent'
 import { formatDateTime, readTime } from '@/lib/utils'
 
 /* ─── Static params for ISR ────────────────────────── */
@@ -76,6 +79,7 @@ export default async function ArticlePage({
   if (!post) notFound()
 
   const related = await getRelatedPosts(post.category_id, post.id, 4)
+  const authorSlug = post.author.toLowerCase().replace(/\s+/g, '-')
 
   /* JSON-LD structured data */
   const jsonLd = {
@@ -94,6 +98,15 @@ export default async function ArticlePage({
     mainEntityOfPage: `https://berita.meureno.com/news/${post.slug}`,
   }
 
+  /* Breadcrumb items */
+  const breadcrumbItems = [
+    { name: 'Beranda', href: '/' },
+    ...(post.category
+      ? [{ name: post.category.name, href: `/category/${post.category.slug}` }]
+      : []),
+    { name: post.title, href: `/news/${post.slug}` },
+  ]
+
   return (
     <>
       {/* JSON-LD */}
@@ -101,6 +114,8 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* Breadcrumb JSON-LD */}
+      <BreadcrumbJsonLd items={breadcrumbItems} />
 
       <div className="max-w-portal mx-auto px-5 mt-6">
         <div
@@ -143,9 +158,14 @@ export default async function ArticlePage({
               {post.title}
             </h1>
 
-            {/* Meta row */}
+            {/* Meta row — with linked author */}
             <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-ink-soft mb-5 pb-5 border-b border-border">
-              <span className="font-semibold text-ink-mid">{post.author}</span>
+              <Link
+                href={`/author/${authorSlug}`}
+                className="font-semibold text-ink-mid hover:text-aceh-green transition-colors"
+              >
+                {post.author}
+              </Link>
               <span className="w-1 h-1 rounded-full bg-border" />
               <span>{formatDateTime(post.created_at)}</span>
               <span className="w-1 h-1 rounded-full bg-border" />
@@ -193,13 +213,13 @@ export default async function ArticlePage({
               </figure>
             )}
 
-            {/* Inline ad above content */}
-            <AdSlot slot="inline" className="mb-6" />
+            {/* Table of Contents */}
+            <TableOfContents html={post.content} />
 
-            {/* Article body */}
-            <div
-              className="article-content"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+            {/* Article body with internal links + ad injection */}
+            <ArticleContent
+              html={post.content}
+              relatedPosts={related.slice(0, 3)}
             />
 
             {/* Tags */}
@@ -217,8 +237,12 @@ export default async function ArticlePage({
               ))}
             </div>
 
-            {/* Author card */}
-            <div className="mt-6 bg-surface rounded-lg p-4 flex items-start gap-3 border border-border">
+            {/* Author card — linked to author page */}
+            <Link
+              href={`/author/${authorSlug}`}
+              className="mt-6 bg-surface rounded-lg p-4 flex items-start gap-3 border border-border
+                         hover:border-aceh-green/30 transition-colors block"
+            >
               <div
                 className="w-12 h-12 rounded-full bg-gradient-to-br from-aceh-green to-aceh-green-dark
                            flex items-center justify-center font-label text-[18px] text-white font-bold shrink-0"
@@ -232,7 +256,7 @@ export default async function ArticlePage({
                   Jurnalis berpengalaman yang meliput berita dari seluruh wilayah Aceh.
                 </p>
               </div>
-            </div>
+            </Link>
 
             {/* Related articles */}
             {related.length > 0 && (

@@ -1,8 +1,15 @@
 'use client'
 
 import { useState, useEffect, useTransition } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { updatePost } from '@/lib/actions'
+import dynamic from 'next/dynamic'
+import PostPreview from '@/components/admin/PostPreview'
+
+const RichTextEditor = dynamic(
+  () => import('@/components/admin/RichTextEditor'),
+  { ssr: false, loading: () => <div className="h-[350px] border rounded-lg animate-pulse bg-gray-50" /> }
+)
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 
@@ -10,12 +17,12 @@ interface Category { id: string; name: string; slug: string }
 
 export default function EditPostPage() {
   const { id } = useParams<{ id: string }>()
-  const router  = useRouter()
 
   const [loading, setLoading]         = useState(true)
   const [categories, setCategories]   = useState<Category[]>([])
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isPending, startTransition]  = useTransition()
+  const [showPreview, setShowPreview] = useState(false)
 
   // Form fields
   const [title, setTitle]             = useState('')
@@ -143,13 +150,15 @@ export default function EditPostPage() {
             className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-none" />
         </div>
 
+        {/* Rich Text Editor (TipTap) */}
         <div>
           <label className="block text-[13px] font-semibold text-ink-mid mb-1.5">
             Konten <span className="text-aceh-red">*</span>
-            <span className="text-ink-soft font-normal ml-2 text-xs">(Mendukung HTML)</span>
           </label>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} required rows={14}
-            className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-y font-mono text-sm" />
+          <RichTextEditor
+            content={content}
+            onChange={setContent}
+          />
         </div>
 
         <div className="flex items-center gap-3">
@@ -165,9 +174,28 @@ export default function EditPostPage() {
             className="bg-aceh-green text-white font-label font-semibold px-6 py-2.5 rounded hover:bg-aceh-green-dark transition-colors disabled:opacity-60">
             {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
           </button>
-          <a href="/admin/posts" className="text-ink-soft font-label text-[13px] hover:text-ink py-2">Batal</a>
+          <button
+            type="button"
+            onClick={() => setShowPreview(true)}
+            className="bg-gray-100 text-ink-mid font-label font-semibold px-5 py-2.5 rounded hover:bg-gray-200 transition-colors text-[13px]"
+          >
+            👁 Preview
+          </button>
+          <a href="/admin/posts" className="text-ink-soft font-label text-[13px] hover:text-ink py-2 ml-auto">Batal</a>
         </div>
       </form>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <PostPreview
+          title={title}
+          content={content}
+          excerpt={excerpt}
+          author={author}
+          featuredImage={featuredImage}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   )
 }

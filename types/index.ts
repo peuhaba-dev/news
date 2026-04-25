@@ -5,6 +5,14 @@ export interface Category {
   created_at: string
 }
 
+export interface Author {
+  id: string
+  name: string
+  slug: string
+  avatar_url: string | null
+  bio: string | null
+}
+
 export interface Post {
   id: string
   title: string
@@ -15,6 +23,8 @@ export interface Post {
   category_id: string | null
   category?: Category
   author: string
+  author_id?: string | null
+  author_detail?: Author | null
   created_at: string
   updated_at: string
   views: number

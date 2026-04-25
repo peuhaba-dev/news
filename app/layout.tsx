@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import Ticker from '@/components/Ticker'
 import CategoryBar from '@/components/CategoryBar'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { getAllCategories } from '@/lib/queries'
 import { getBreakingNews } from '@/lib/queries'
 
@@ -35,6 +36,9 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: '/' },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
 }
 
 export const viewport: Viewport = {
@@ -67,6 +71,9 @@ export default async function RootLayout({
         )}
       </head>
       <body className="antialiased">
+        {/* Google Analytics */}
+        <GoogleAnalytics />
+
         {/* ── Chrome above the fold ── */}
         <Topbar />
         <Ticker items={breakingNews} />

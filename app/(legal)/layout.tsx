@@ -1,0 +1,19 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  robots: { index: true, follow: true },
+}
+
+export default function LegalLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <div className="max-w-portal mx-auto px-5 py-10">
+      <div className="max-w-3xl mx-auto">
+        {children}
+      </div>
+    </div>
+  )
+}

@@ -145,3 +145,60 @@
 /* ─── Scrollbar hide utility ─────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Article internal links ─────────────────────── */
+.article-content a {
+  color: var(--aceh-green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.article-content a:hover {
+  color: var(--aceh-green-dark);
+}
+
+/* ─── TipTap Editor styles ───────────────────────── */
+.tiptap {
+  outline: none;
+  min-height: 300px;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9CA3AF;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+.tiptap h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 1.5rem 0 0.75rem;
+}
+.tiptap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+.tiptap p {
+  margin-bottom: 0.75rem;
+}
+.tiptap ul,
+.tiptap ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.tiptap blockquote {
+  border-left: 4px solid var(--aceh-green);
+  background: var(--aceh-green-light);
+  padding: 12px 20px;
+  margin: 1rem 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+}
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}

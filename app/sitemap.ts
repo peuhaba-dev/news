@@ -12,10 +12,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: now, changeFrequency: 'hourly',  priority: 1.0 },
-    { url: `${BASE}/tentang`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE}/kontak`,   lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE}/redaksi`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE}/iklan`,    lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${BASE}/tentang`,            lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE}/kontak`,             lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE}/kebijakan-privasi`,  lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${BASE}/disclaimer`,         lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
   ]
 
   const postRoutes: MetadataRoute.Sitemap = postSlugs.map((slug) => ({

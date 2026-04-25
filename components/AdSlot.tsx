@@ -1,7 +1,6 @@
 interface AdSlotProps {
   slot: 'top' | 'sidebar' | 'inline'
   adSlotId?: string          // Google AdSense data-ad-slot value
-  adClient?: string          // Google AdSense data-ad-client value
   className?: string
 }
 
@@ -11,15 +10,15 @@ const SLOT_CONFIG: Record<AdSlotProps['slot'], { label: string; className: strin
   inline:  { label: 'IKLAN — 728×90',  className: 'h-[100px] my-6' },
 }
 
-export default function AdSlot({ slot, adSlotId, adClient, className = '' }: AdSlotProps) {
+export default function AdSlot({ slot, adSlotId, className = '' }: AdSlotProps) {
   const { label, className: defaultClass } = SLOT_CONFIG[slot]
+  const adClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT
   const isProd = process.env.NODE_ENV === 'production' && adSlotId && adClient
 
   // In production with valid AdSense IDs — render real ad
   if (isProd) {
     return (
       <div className={`${defaultClass} ${className}`}>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <ins
           className="adsbygoogle block"
           style={{ display: 'block' }}

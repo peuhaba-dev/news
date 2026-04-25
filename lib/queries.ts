@@ -103,3 +103,18 @@ export async function getBreakingNews() {
   const data = await get<any[]>('/api/berita/breaking-news')
   return Array.isArray(data) ? data : []
 }
+
+// ─── AUTHORS ──────────────────────────────────────────
+export async function getAuthorBySlug(slug: string) {
+  const data = await get<any>(`/api/berita/authors/${slug}`)
+  if (!data || data.error) return null
+  return data
+}
+
+export async function getPostsByAuthor(authorSlug: string, limit = 20) {
+  const data = await get<any>(`/api/berita/posts?limit=${limit}`)
+  const posts = (data.posts ?? []).filter(
+    (p: any) => p.authorDetail?.slug === authorSlug || p.author?.toLowerCase().replace(/\s+/g, '-') === authorSlug
+  )
+  return posts.map(mapPost)
+}
