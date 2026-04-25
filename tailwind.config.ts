@@ -10,11 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         aceh: {
-          green:      '#00703C',
+          green:        '#00703C',
           'green-dark': '#004D2A',
-          'green-light': '#e8f5ee',
-          red:        '#C8102E',
-          gold:       '#C9941A',
+          'green-light':'#e8f5ee',
+          red:          '#C8102E',
+          gold:         '#C9941A',
           'gold-light': '#fff8e6',
         },
         ink: {
@@ -26,9 +26,9 @@ const config: Config = {
         surface: '#F9FAFB',
       },
       fontFamily: {
-        head:  ['Playfair Display', 'Georgia', 'serif'],
-        label: ['Oswald', 'sans-serif'],
-        body:  ['Source Sans 3', 'system-ui', 'sans-serif'],
+        head:  ['var(--font-head)', 'Georgia', 'serif'],
+        label: ['var(--font-label)', 'sans-serif'],
+        body:  ['var(--font-body)', 'system-ui', 'sans-serif'],
       },
       maxWidth: {
         portal: '1280px',
