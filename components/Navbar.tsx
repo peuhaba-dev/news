@@ -62,7 +62,6 @@ export default function Navbar({ categories }: NavbarProps) {
         </div>
         <div className="flex items-center gap-2 ml-auto shrink-0">
           <Link href="/search" className="p-1.5 text-ink-mid rounded hover:text-aceh-green hover:bg-aceh-green-light">🔍</Link>
-          <Link href="/admin" className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white rounded font-semibold hover:bg-aceh-green-dark transition-colors">Admin</Link>
           <button className="lg:hidden p-1.5 text-ink-mid text-lg" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? '✕' : '☰'}
           </button>
