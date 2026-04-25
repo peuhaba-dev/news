@@ -1,20 +1,13 @@
 import type { BreakingNews } from '@/types'
 
-const DEFAULT_TICKER: string[] = [
-  'Gubernur Aceh Resmikan 12 Gampong Digital di Kabupaten Aceh Besar',
-  'DPRK Banda Aceh Setujui APBK Perubahan 2026 Senilai Rp 1,2 Triliun',
-  'Pemerintah Aceh Targetkan 500 Km Jalan Nasional Selesai Akhir Tahun',
-  'Harga Kopi Gayo Melonjak di Pasar Internasional, Petani Aceh Tengah Bersyukur',
-  'Tim SAR Berhasil Evakuasi Korban Banjir di Aceh Selatan, 47 Warga Mengungsi',
-]
-
 interface TickerProps {
   items?: BreakingNews[]
 }
 
 export default function Ticker({ items }: TickerProps) {
-  const texts =
-    items && items.length > 0 ? items.map((i) => i.text) : DEFAULT_TICKER
+  const texts = items && items.length > 0 ? items.map((i) => i.text) : []
+
+  if (texts.length === 0) return null
 
   return (
     <div

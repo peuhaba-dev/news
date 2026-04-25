@@ -25,11 +25,20 @@ export default function Navbar({ categories }: NavbarProps) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    // Show admin link only when admin_token cookie is present
+    const hasAdminToken = document.cookie
+      .split(';')
+      .some((c) => c.trim().startsWith('admin_token='))
+    setIsAdmin(hasAdminToken)
   }, [])
 
   const navItems = categories && categories.length > 0
@@ -62,7 +71,9 @@ export default function Navbar({ categories }: NavbarProps) {
         </div>
         <div className="flex items-center gap-2 ml-auto shrink-0">
           <Link href="/search" className="p-1.5 text-ink-mid rounded hover:text-aceh-green hover:bg-aceh-green-light">🔍</Link>
-          <Link href="/admin" className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white rounded font-semibold hover:bg-aceh-green-dark transition-colors">Admin</Link>
+          {isAdmin && (
+            <Link href="/admin" className="font-label text-[11px] sm:text-[12px] px-3 sm:px-4 py-1.5 bg-aceh-green text-white rounded font-semibold hover:bg-aceh-green-dark transition-colors">Admin</Link>
+          )}
           <button className="lg:hidden p-1.5 text-ink-mid text-lg" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? '✕' : '☰'}
           </button>
