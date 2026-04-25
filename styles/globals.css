@@ -265,3 +265,105 @@
   border-radius: 8px;
   margin: 1rem 0;
 }
+
+/* ─── Article content extras ──────────────────────── */
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.article-content ul {
+  list-style-type: disc;
+}
+
+.article-content ol {
+  list-style-type: decimal;
+}
+
+.article-content li {
+  margin-bottom: 0.4rem;
+  line-height: 1.7;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 2px solid var(--border);
+  margin: 2rem 0;
+}
+
+.article-content strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.article-content em {
+  font-style: italic;
+}
+
+/* ─── Card hover lift effect ─────────────────────── */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* ─── Share buttons ─────────────────────────────── */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 14px;
+  border-radius: 5px;
+  color: #fff;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.share-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* ─── Breadcrumb ─────────────────────────────────── */
+.breadcrumb-item+.breadcrumb-item::before {
+  content: '›';
+  margin: 0 6px;
+  color: var(--ink-soft);
+}
+
+/* ─── Related articles grid ──────────────────────── */
+.related-card {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.related-card:hover {
+  border-color: var(--aceh-green);
+  box-shadow: 0 4px 16px rgba(0, 112, 60, 0.10);
+}
+
+/* ─── Newsletter widget ───────────────────────────── */
+.newsletter-widget {
+  background: linear-gradient(135deg, var(--aceh-green-dark) 0%, var(--aceh-green) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #fff;
+}
