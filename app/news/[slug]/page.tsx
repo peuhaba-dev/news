@@ -10,6 +10,7 @@ import {
 } from '@/lib/queries'
 import Sidebar from '@/components/Sidebar'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
+import PromoAd from '@/components/PromoAd'
 import { formatDateTime, readTime } from '@/lib/utils'
 
 /* ─── Static params for ISR ────────────────────────── */
@@ -326,7 +327,10 @@ export default async function ArticlePage({
               </div>
             </Link>
 
-            {/* ── Related Articles — placed AFTER content, no injection ── */}
+            {/* ── Inline ad before related articles ── */}
+            <PromoAd variant="inline" className="mt-10" />
+
+            {/* ── Related Articles — placed AFTER content, no injection —— */}
             {related.length > 0 && (
               <div className="mt-10">
                 <div className="sec-head-border flex items-center justify-between mb-6 pb-2.5">

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Post } from '@/types'
 import SectionHeader from './SectionHeader'
+import PromoAd from './PromoAd'
 import { formatDate } from '@/lib/utils'
 
 const REGIONS = [
@@ -36,6 +37,9 @@ interface SidebarProps {
 export default function Sidebar({ mostReadPosts }: SidebarProps) {
   return (
     <aside className="space-y-7">
+
+      {/* ── Promo Ad: wisata.meureno.com ── */}
+      <PromoAd variant="sidebar" />
 
       {/* ── Most Read ── */}
       <div>

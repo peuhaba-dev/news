@@ -5,8 +5,8 @@ import Hero from '@/components/Hero'
 import NewsCard from '@/components/NewsCard'
 import BigCard from '@/components/BigCard'
 import Sidebar from '@/components/Sidebar'
-// import AdSlot from '@/components/AdSlot' // DISABLED — stabilizing layout
 import SectionHeader from '@/components/SectionHeader'
+import PromoAd from '@/components/PromoAd'
 import { formatDate } from '@/lib/utils'
 
 // Seed data shown when DB is empty (development / demo)
@@ -57,7 +57,8 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* ── Top ad banner — DISABLED for stability ── */}
+      {/* ── Top banner ad — wisata.meureno.com ── */}
+      <PromoAd variant="banner" className="mb-1" />
 
       {/* ── Hero ── */}
       <div className="max-w-portal mx-auto px-4 sm:px-5">
@@ -109,7 +110,8 @@ export default async function HomePage() {
             {/* Big feature card */}
             <BigCard post={bigCard} />
 
-            {/* Inline ad — DISABLED for stability */}
+            {/* Inline ad — wisata.meureno.com */}
+            <PromoAd variant="inline" />
 
             {/* Article list */}
             <div>
