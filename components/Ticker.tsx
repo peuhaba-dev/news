@@ -17,7 +17,7 @@ interface TickerProps {
 
 export default function Ticker({ items }: TickerProps) {
   const texts = items && items.length > 0
-    ? items.map((i) => i.title)
+    ? items.map((i) => i.text)
     : DEFAULT_TICKER
 
   const trackRef = useRef<HTMLDivElement>(null)
