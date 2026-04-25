@@ -5,7 +5,7 @@ import Hero from '@/components/Hero'
 import NewsCard from '@/components/NewsCard'
 import BigCard from '@/components/BigCard'
 import Sidebar from '@/components/Sidebar'
-import AdSlot from '@/components/AdSlot'
+// import AdSlot from '@/components/AdSlot' // DISABLED — stabilizing layout
 import SectionHeader from '@/components/SectionHeader'
 import { formatDate } from '@/lib/utils'
 
@@ -29,8 +29,8 @@ const SEED_POSTS = Array.from({ length: 8 }, (_, i) => ({
   category_id: 'cat-1',
   category: { id: 'cat-1', name: ['Aceh Terkini','Ekonomi','Pendidikan','Politik','Sosial','Religi','Budaya','Hukum'][i], slug: 'aceh-terkini', created_at: '' },
   author: ['Ahmad Fauzan','Siti Rahma','Rizki Maulana','Nurul Hidayah','Teuku Arif','Fauziah','Zulkifli','Marlina'][i],
-  created_at: new Date(Date.now() - i * 3_600_000).toISOString(),
-  views: Math.floor(Math.random() * 2000) + 200,
+  created_at: '2026-04-25T00:00:00.000Z',
+  views: 500 + i * 150,
 }))
 
 const WISATA = [
@@ -57,10 +57,7 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* ── Top ad banner ── */}
-      <div className="max-w-portal mx-auto px-4 sm:px-5 mt-3 sm:mt-4">
-        <AdSlot slot="top" />
-      </div>
+      {/* ── Top ad banner — DISABLED for stability ── */}
 
       {/* ── Hero ── */}
       <div className="max-w-portal mx-auto px-4 sm:px-5">
@@ -112,8 +109,7 @@ export default async function HomePage() {
             {/* Big feature card */}
             <BigCard post={bigCard} />
 
-            {/* Inline ad */}
-            <AdSlot slot="inline" />
+            {/* Inline ad — DISABLED for stability */}
 
             {/* Article list */}
             <div>

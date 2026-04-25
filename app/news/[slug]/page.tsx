@@ -4,18 +4,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   getPostBySlug,
-  getRelatedPosts,
   getMostReadPosts,
   getAllPostSlugs,
 } from '@/lib/queries'
 import Sidebar from '@/components/Sidebar'
-import NewsCard from '@/components/NewsCard'
-import AdSlot from '@/components/AdSlot'
-import SectionHeader from '@/components/SectionHeader'
-import CommentForm from '@/components/CommentForm'
+// import NewsCard from '@/components/NewsCard' // DISABLED — stabilizing layout
+// import SectionHeader from '@/components/SectionHeader' // DISABLED — stabilizing layout
+// import CommentForm from '@/components/CommentForm' // DISABLED — stabilizing layout
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
-import TableOfContents from '@/components/TableOfContents'
-import ArticleContent from '@/components/ArticleContent'
 import { formatDateTime, readTime } from '@/lib/utils'
 
 /* ─── Static params for ISR ────────────────────────── */
@@ -78,7 +74,7 @@ export default async function ArticlePage({
 
   if (!post) notFound()
 
-  const related = await getRelatedPosts(post.category_id, post.id, 4)
+  // const related = await getRelatedPosts(post.category_id, post.id, 4) // DISABLED
   const authorSlug = post.author.toLowerCase().replace(/\s+/g, '-')
 
   /* JSON-LD structured data */
@@ -117,11 +113,8 @@ export default async function ArticlePage({
       {/* Breadcrumb JSON-LD */}
       <BreadcrumbJsonLd items={breadcrumbItems} />
 
-      <div className="max-w-portal mx-auto px-5 mt-6">
-        <div
-          className="grid gap-7"
-          style={{ gridTemplateColumns: 'minmax(0,1fr) 320px' }}
-        >
+      <div className="max-w-portal mx-auto px-4 sm:px-5 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 lg:gap-7">
           {/* ── Article ── */}
           <article>
             {/* Breadcrumb */}
@@ -153,12 +146,11 @@ export default async function ArticlePage({
             )}
 
             {/* Title */}
-            <h1 className="font-head text-[32px] md:text-[38px] font-black text-ink
-                           leading-[1.2] mb-4">
+            <h1 className="font-head text-[28px] sm:text-[32px] md:text-[38px] font-black text-ink leading-[1.2] mb-4">
               {post.title}
             </h1>
 
-            {/* Meta row — with linked author */}
+            {/* Meta row */}
             <div className="flex flex-wrap items-center gap-2.5 text-[12.5px] text-ink-soft mb-5 pb-5 border-b border-border">
               <Link
                 href={`/author/${authorSlug}`}
@@ -197,7 +189,7 @@ export default async function ArticlePage({
             {/* Featured image */}
             {post.featured_image && (
               <figure className="mb-6 rounded-lg overflow-hidden">
-                <div className="relative h-[400px] w-full">
+                <div className="relative h-[250px] sm:h-[350px] md:h-[400px] w-full">
                   <Image
                     src={post.featured_image}
                     alt={post.title}
@@ -213,13 +205,10 @@ export default async function ArticlePage({
               </figure>
             )}
 
-            {/* Table of Contents */}
-            <TableOfContents html={post.content} />
-
-            {/* Article body with internal links + ad injection */}
-            <ArticleContent
-              html={post.content}
-              relatedPosts={related.slice(0, 3)}
+            {/* Article body — single clean render, no injection */}
+            <div
+              className="article-content"
+              dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
             {/* Tags */}
@@ -237,7 +226,7 @@ export default async function ArticlePage({
               ))}
             </div>
 
-            {/* Author card — linked to author page */}
+            {/* Author card */}
             <Link
               href={`/author/${authorSlug}`}
               className="mt-6 bg-surface rounded-lg p-4 flex items-start gap-3 border border-border
@@ -258,22 +247,15 @@ export default async function ArticlePage({
               </div>
             </Link>
 
-            {/* Related articles */}
-            {related.length > 0 && (
-              <div className="mt-8">
-                <SectionHeader title="Berita Terkait" />
-                {related.map((p: any, i: number) => (
-                  <NewsCard key={p.id} post={p} index={i} />
-                ))}
-              </div>
-            )}
+            {/* Related articles — DISABLED for stability */}
 
-            {/* Comment form */}
-            <CommentForm postId={post.id} />
+            {/* Comment form — DISABLED for stability */}
           </article>
 
-          {/* ── Sidebar ── */}
-          <Sidebar mostReadPosts={mostRead} />
+          {/* ── Sidebar (hidden on mobile) ── */}
+          <div className="hidden lg:block">
+            <Sidebar mostReadPosts={mostRead} />
+          </div>
         </div>
       </div>
     </>

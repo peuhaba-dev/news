@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Post } from '@/types'
-import AdSlot from './AdSlot'
+// import AdSlot from './AdSlot' // DISABLED — stabilizing layout
 import SectionHeader from './SectionHeader'
 import { formatDate } from '@/lib/utils'
 
@@ -39,8 +39,7 @@ export default function Sidebar({ mostReadPosts }: SidebarProps) {
   return (
     <aside className="space-y-7">
 
-      {/* ── AdSense Sidebar ── */}
-      <AdSlot slot="sidebar" />
+      {/* ── AdSense Sidebar — DISABLED for stability ── */}
 
       {/* ── Most Read ── */}
       <div>
