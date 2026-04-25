@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin-uuid-1234",
+    "email": "admin@meureno.com",
+    "name": "Super Admin",
+    "passwordHash": "$2b$12$H/lVgsOEYWGu1gCpJkCxMeeVYtjoiZitsrmOUIgrwZRKNp0eeSPkO",
+    "role": "SUPER_ADMIN",
+    "createdAt": "2026-04-25T10:30:46.390Z",
+    "updatedAt": "2026-04-25T10:30:46.391Z"
+  }
+]
