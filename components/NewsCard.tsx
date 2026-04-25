@@ -56,12 +56,12 @@ export default function NewsCard({ post, index = 0 }: NewsCardProps) {
           {post.title}
         </h3>
         {post.excerpt && (
-          <p
+          <div
             className="text-[13px] text-ink-soft leading-[1.5] mb-1.5
                        line-clamp-2"
           >
             {post.excerpt}
-          </p>
+          </div>
         )}
         <div className="flex items-center gap-2.5 text-[11.5px] text-ink-soft">
           <span className="font-semibold text-ink-mid">{post.author}</span>

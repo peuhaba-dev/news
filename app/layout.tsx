@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import '@/styles/globals.css'
 import Topbar from '@/components/Topbar'
 import Navbar from '@/components/Navbar'
@@ -60,17 +61,16 @@ export default async function RootLayout({
 
   return (
     <html lang="id" suppressHydrationWarning>
-      <head>
-        {/* Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX */}
+      <body className="antialiased" suppressHydrationWarning>
+        {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
-          <script
+          <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
             crossOrigin="anonymous"
+            strategy="afterInteractive"
           />
         )}
-      </head>
-      <body className="antialiased" suppressHydrationWarning>
         {/* Google Analytics */}
         <GoogleAnalytics />
 
