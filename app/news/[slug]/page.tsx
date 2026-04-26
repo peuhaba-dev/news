@@ -246,6 +246,8 @@ export default async function ArticlePage({
 
             {/* Comment form */}
             <CommentForm postId={post.id} />
+            {/* Banner bawah artikel */}
+            <AdBanner position="banner-bottom" className="mt-6" />
           </article>
 
           {/* ── Sidebar ── */}
