@@ -150,7 +150,7 @@ export default function Footer() {
               ))}
             </div>
             <p className="text-[11px] text-white/30">
-              Meureno Media Digital
+              <a href="/admin/login" className="hover:text-white/60 transition-colors">Meureno Media Digital</a>
             </p>
           </div>
         </div>
