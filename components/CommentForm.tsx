@@ -9,9 +9,9 @@ interface CommentFormProps {
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 
 export default function CommentForm({ postId }: CommentFormProps) {
-  const [name, setName]       = useState('')
+  const [name, setName] = useState('')
   const [content, setContent] = useState('')
-  const [status, setStatus]   = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
