@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Playfair_Display, Oswald, Source_Sans_3 } from 'next/font/google'
 import '@/styles/globals.css'
 import Topbar from '@/components/Topbar'
@@ -80,6 +81,14 @@ export default async function RootLayout({
 
   return (
     <html lang="id" className={`${playfair.variable} ${oswald.variable} ${sourceSans.variable}`}>
+      <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1150834306562665"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="antialiased font-body">
         <Topbar />
         <Ticker items={breakingNews} />
