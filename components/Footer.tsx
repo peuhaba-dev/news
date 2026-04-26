@@ -69,12 +69,12 @@ export default function Footer() {
             </div>
 
             <p className="text-[12.5px] text-white/60 leading-relaxed mb-4">
-              Portal berita Aceh modern, cepat, akurat, dan terpercaya.
-              Mewartakan Aceh untuk Indonesia dan dunia sejak 2024.
+              Portal informasi Aceh modern dan terpercaya.
+              Mewartakan Aceh untuk Indonesia dan dunia.
             </p>
 
             <address className="not-italic text-[12px] text-white/50 mb-4 space-y-0.5 leading-relaxed">
-              <div>📍 Jl. T. Panglima Polem No. 44, Banda Aceh 23122</div>
+              <div>📍 Banda Aceh 23122</div>
               <div>📧 redaksi@berita.meureno.com</div>
               <div>📞 (0651) 123-4567</div>
             </address>
@@ -150,7 +150,7 @@ export default function Footer() {
               ))}
             </div>
             <p className="text-[11px] text-white/30">
-              PT. Meureno Media Digital · SIUP No: 123/DPMPTSP/2024 · Anggota Dewan Pers Indonesia
+              Meureno Media Digital
             </p>
           </div>
         </div>

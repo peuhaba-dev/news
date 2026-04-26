@@ -224,9 +224,9 @@ export default async function ArticlePage({
               </div>
               <div>
                 <div className="font-label text-[14px] font-bold text-ink">{post.author}</div>
-                <div className="text-[11px] text-ink-soft mb-1">Jurnalis — Berita Meureno</div>
+                <div className="text-[11px] text-ink-soft mb-1">Berita Meureno</div>
                 <p className="text-[12.5px] text-ink-soft">
-                  Jurnalis berpengalaman yang meliput berita dari seluruh wilayah Aceh.
+                  Admin Penulis Meureno Platform.
                 </p>
               </div>
             </div>
