@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Kontak',
-  description: 'Hubungi redaksi Berita Meureno untuk informasi, kerjasama, dan pengiriman berita.',
+  description: 'Hubungi redaksi Berita Meureno untuk informasi, kerjasama, dan pengiriman informasi.',
 }
 
 export default function KontakPage() {
@@ -26,7 +26,7 @@ export default function KontakPage() {
           <h2 className="font-head text-[20px] font-bold text-ink">Informasi Kontak</h2>
 
           {[
-            { icon: '📍', label: 'Alamat', value: 'Jl. T. Nyak Arief No. 1\nBanda Aceh 23111\nAceh, Indonesia' },
+            { icon: '📍', label: 'Alamat', value: 'Jl. \nBanda Aceh 23111\nAceh, Indonesia' },
             { icon: '📧', label: 'Email Redaksi', value: 'redaksi@meureno.com' },
             { icon: '📧', label: 'Email Iklan', value: 'iklan@meureno.com' },
             { icon: '📞', label: 'Telepon', value: '+62 651 000 0000' },

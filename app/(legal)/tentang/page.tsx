@@ -16,7 +16,7 @@ export default function TentangPage() {
           Berita Meureno
         </h1>
         <p className="text-[16px] text-ink-soft leading-relaxed">
-          Portal berita Aceh yang modern, cepat, akurat, dan terpercaya.
+          Portal informasi Aceh yang modern, cepat, akurat, dan terpercaya.
         </p>
       </div>
 
@@ -24,21 +24,21 @@ export default function TentangPage() {
         <section>
           <h2 className="font-head text-[22px] font-bold text-ink mb-3">Siapa Kami</h2>
           <p>
-            Berita Meureno adalah portal berita digital yang berfokus pada liputan berita dari seluruh
+            Berita Meureno adalah portal informasi digital yang berfokus pada informasi terkini dari seluruh
             wilayah Aceh. Didirikan dengan semangat untuk menghadirkan informasi yang akurat, cepat,
             dan berimbang kepada masyarakat Aceh dan diaspora Aceh di seluruh dunia.
           </p>
           <p className="mt-3">
-            Nama "Meureno" berasal dari bahasa Aceh yang berarti "milik kita" — mencerminkan komitmen
-            kami bahwa portal ini adalah milik dan untuk masyarakat Aceh.
+            Nama "Meureno" berasal dari bahasa Aceh yang berarti "belajar" — mencerminkan komitmen
+            kami bahwa portal ini adalah tempat belajar dan menambah pengetahuan untuk masyarakat Aceh.
           </p>
         </section>
 
         <section>
           <h2 className="font-head text-[22px] font-bold text-ink mb-3">Visi</h2>
           <p>
-            Menjadi portal berita digital terdepan di Aceh yang dipercaya oleh masyarakat sebagai
-            sumber informasi utama yang akurat, independen, dan bertanggung jawab.
+            Menjadi portal digital terdepan di Aceh yang dipercaya oleh masyarakat sebagai
+            sumber informasi yang akurat, independen, dan bertanggung jawab.
           </p>
         </section>
 
@@ -85,10 +85,10 @@ export default function TentangPage() {
           <h2 className="font-head text-[22px] font-bold text-ink mb-3">Tim Redaksi</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { name: 'Ahmad Fauzan', role: 'Pemimpin Redaksi' },
-              { name: 'Siti Rahma', role: 'Redaktur Pelaksana' },
-              { name: 'Rizki Maulana', role: 'Redaktur Senior' },
-              { name: 'Nurul Hidayah', role: 'Reporter' },
+              { name: 'Meureno', role: 'Pemimpin Redaksi' },
+              { name: 'Lowongan Terbuka', role: 'Redaktur Pelaksana' },
+              { name: 'Lowongan Terbuka', role: 'Redaktur Senior' },
+              { name: 'Lowongan Terbuka', role: 'Reporter' },
             ].map(({ name, role }) => (
               <div key={name} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
                 <div className="w-10 h-10 rounded-full bg-aceh-green flex items-center justify-center text-white font-bold text-[16px] shrink-0">
