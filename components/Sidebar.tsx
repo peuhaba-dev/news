@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getPostsByCategory } from '@/lib/queries'
 import type { Post } from '@/types'
 import AdSlot from './AdSlot'
+import AdBanner from './AdBanner'
 import SectionHeader from './SectionHeader'
 import { formatDate } from '@/lib/utils'
 
@@ -42,6 +43,8 @@ export default async function Sidebar({ mostReadPosts }: SidebarProps) {
   return (
     <aside className="space-y-7">
 
+      {/* ── Iklan Manual Sidebar ── */}
+      <AdBanner position="sidebar" />
       {/* ── AdSense Sidebar ── */}
       <AdSlot slot="sidebar" />
 

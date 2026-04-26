@@ -11,6 +11,7 @@ import {
 import Sidebar from '@/components/Sidebar'
 import NewsCard from '@/components/NewsCard'
 import AdSlot from '@/components/AdSlot'
+import AdBanner from '@/components/AdBanner'
 import SectionHeader from '@/components/SectionHeader'
 import CommentForm from '@/components/CommentForm'
 import { formatDateTime, readTime } from '@/lib/utils'
@@ -191,6 +192,8 @@ export default async function ArticlePage({
             )}
 
             {/* Inline ad above content */}
+            <AdBanner position="banner-top" className="mb-6" />
+            <AdBanner position="inline" className="mb-6" />
             <AdSlot slot="inline" className="mb-6" />
 
             {/* Article body */}
