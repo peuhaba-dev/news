@@ -142,6 +142,27 @@ export default function NewPostPage() {
             Konten <span className="text-red-500">*</span>
             <span className="text-ink-soft font-normal ml-2 text-xs">(Mendukung HTML)</span>
           </label>
+          <div className="flex gap-2 mb-2">
+            <input id="yt-url" type="url" placeholder="Paste URL YouTube..."
+              className="flex-1 border border-border rounded-md px-3 py-2 text-[13px] outline-none focus:border-aceh-green" />
+            <button type="button"
+              onClick={() => {
+                const input = document.getElementById('yt-url') as HTMLInputElement
+                const url = input.value.trim()
+                if (!url) return
+                const match = url.match(/(?:v=|youtu\.be\/)([\w-]{11})/)
+                if (!match) { alert('URL YouTube tidak valid'); return }
+                const id = match[1]
+                const iframe = `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1.5rem 0;border-radius:8px"><iframe src="https://www.youtube.com/embed/${id}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen loading="lazy"></iframe></div>`
+                setContent(prev => prev + "\n" + iframe)
+                input.value = ""
+              }}
+              className="shrink-0 bg-red-500 text-white text-[13px] font-semibold px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
+              ▶ YouTube
+            </button>
+          </div>
+          <label className="sr-only">dummy
+          </label>
           <textarea value={content} onChange={e => setContent(e.target.value)} required
             rows={16} placeholder="<p>Tulis konten artikel di sini...</p>"
             className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-y font-mono text-sm" />
