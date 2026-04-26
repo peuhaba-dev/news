@@ -23,19 +23,19 @@ export default function NewsCard({ post, index = 0 }: NewsCardProps) {
   return (
     <Link
       href={`/news/${post.slug}`}
-      className="grid gap-3.5 py-4 border-b border-border last:border-b-0
-                 hover:opacity-80 transition-opacity duration-150 cursor-pointer group"
-      style={{ gridTemplateColumns: '140px 1fr' }}
+      className="grid gap-3 py-3.5 border-b border-border last:border-b-0
+                 active:opacity-70 transition-opacity duration-150 cursor-pointer group"
+      style={{ gridTemplateColumns: 'var(--news-card-thumb, 100px) 1fr' }}
     >
       {/* Thumbnail */}
-      <div className="w-[140px] h-[95px] rounded-md overflow-hidden shrink-0 relative">
+      <div className="w-[100px] sm:w-[140px] h-[70px] sm:h-[95px] rounded-md overflow-hidden shrink-0 relative">
         {post.featured_image ? (
           <Image
             src={post.featured_image}
             alt={post.title}
             fill
             className="object-cover"
-            sizes="140px"
+            sizes="(max-width: 640px) 100px, 140px"
           />
         ) : (
           <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
@@ -43,33 +43,33 @@ export default function NewsCard({ post, index = 0 }: NewsCardProps) {
       </div>
 
       {/* Body */}
-      <div>
+      <div className="min-w-0">
         <div
-          className="font-label text-[10.5px] tracking-[0.8px] text-aceh-green
-                     font-bold uppercase mb-1.5 flex items-center gap-1.5"
+          className="font-label text-[10px] tracking-[0.8px] text-aceh-green
+                     font-bold uppercase mb-1 flex items-center gap-1.5 truncate"
         >
           {post.category?.name ?? 'Berita'}
         </div>
         <h3
-          className="font-head text-[16px] font-bold text-ink leading-[1.35]
-                     mb-1.5 group-hover:text-aceh-green transition-colors duration-150"
+          className="font-head text-[14px] sm:text-[16px] font-bold text-ink leading-[1.35]
+                     mb-1 group-hover:text-aceh-green transition-colors duration-150 line-clamp-2"
         >
           {post.title}
         </h3>
         {post.excerpt && (
           <p
-            className="text-[13px] text-ink-soft leading-[1.5] mb-1.5
-                       line-clamp-2"
+            className="text-[12px] sm:text-[13px] text-ink-soft leading-[1.5] mb-1
+                       line-clamp-2 hidden sm:block"
           >
             {post.excerpt}
           </p>
         )}
-        <div className="flex items-center gap-2.5 text-[11.5px] text-ink-soft">
-          <span className="font-semibold text-ink-mid">{post.author}</span>
-          <span className="w-[3px] h-[3px] rounded-full bg-border inline-block" />
+        <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-[10.5px] sm:text-[11.5px] text-ink-soft">
+          <span className="font-semibold text-ink-mid truncate max-w-[80px] sm:max-w-none">{post.author}</span>
+          <span className="w-[3px] h-[3px] rounded-full bg-border inline-block hidden xs:inline-block" />
           <span>{formatDate(post.created_at)}</span>
-          <span className="w-[3px] h-[3px] rounded-full bg-border inline-block" />
-          <span>{post.views.toLocaleString('id-ID')} dibaca</span>
+          <span className="w-[3px] h-[3px] rounded-full bg-border inline-block hidden sm:inline-block" />
+          <span className="hidden sm:inline">{post.views.toLocaleString('id-ID')} dibaca</span>
         </div>
       </div>
     </Link>

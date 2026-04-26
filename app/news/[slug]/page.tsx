@@ -102,11 +102,8 @@ export default async function ArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-portal mx-auto px-5 mt-6">
-        <div
-          className="grid gap-7"
-          style={{ gridTemplateColumns: 'minmax(0,1fr) 320px' }}
-        >
+      <div className="max-w-portal mx-auto px-4 sm:px-5 mt-5 sm:mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 lg:gap-7">
           {/* ── Article ── */}
           <article>
             {/* Breadcrumb */}
@@ -138,7 +135,7 @@ export default async function ArticlePage({
             )}
 
             {/* Title */}
-            <h1 className="font-head text-[32px] md:text-[38px] font-black text-ink
+            <h1 className="font-head text-[24px] sm:text-[30px] md:text-[38px] font-black text-ink
                            leading-[1.2] mb-4">
               {post.title}
             </h1>
@@ -155,7 +152,7 @@ export default async function ArticlePage({
             </div>
 
             {/* Share row */}
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex flex-wrap items-center gap-2 mb-6">
               <span className="text-[12px] text-ink-soft font-semibold">Bagikan:</span>
               {[
                 { label: 'Facebook', color: 'bg-[#1877F2]' },
@@ -165,9 +162,9 @@ export default async function ArticlePage({
               ].map(({ label, color }) => (
                 <button
                   key={label}
-                  className={`${color} text-white text-[11px] font-label px-3 py-1
-                              rounded font-semibold tracking-[0.5px] hover:opacity-85
-                              transition-opacity`}
+                  className={`${color} text-white text-[11px] font-label px-3 py-1.5
+                              rounded font-semibold tracking-[0.5px] active:opacity-75
+                              hover:opacity-85 transition-opacity min-h-[36px]`}
                 >
                   {label}
                 </button>
@@ -176,8 +173,8 @@ export default async function ArticlePage({
 
             {/* Featured image */}
             {post.featured_image && (
-              <figure className="mb-6 rounded-lg overflow-hidden">
-                <div className="relative h-[400px] w-full">
+              <figure className="mb-6 rounded-xl overflow-hidden">
+                <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
                   <Image
                     src={post.featured_image}
                     alt={post.title}
@@ -187,7 +184,7 @@ export default async function ArticlePage({
                     sizes="(max-width: 768px) 100vw, 860px"
                   />
                 </div>
-                <figcaption className="text-[12px] text-ink-soft text-center mt-2 italic">
+                <figcaption className="text-[12px] text-ink-soft text-center mt-2 italic px-2">
                   {post.title}
                 </figcaption>
               </figure>

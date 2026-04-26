@@ -36,7 +36,7 @@ export default function CategoryBar({ categories }: CategoryBarProps) {
   return (
     <div className="bg-surface border-b border-border">
       <div
-        className="max-w-portal mx-auto px-5 flex gap-1
+        className="max-w-portal mx-auto px-3 sm:px-5 flex gap-0.5
                    overflow-x-auto no-scrollbar"
       >
         {pills.map(({ label, slug }) => {
@@ -50,11 +50,12 @@ export default function CategoryBar({ categories }: CategoryBarProps) {
             <Link
               key={slug}
               href={href}
-              className={`font-label text-[11.5px] tracking-[0.8px] px-3.5 py-2
+              className={`font-label text-[11.5px] tracking-[0.8px] px-3 sm:px-3.5 py-3
                           whitespace-nowrap border-b-[3px] transition-all duration-150
+                          min-h-[44px] flex items-center
                           ${isActive
                             ? 'text-aceh-green border-aceh-green font-bold'
-                            : 'text-ink-soft border-transparent hover:text-aceh-green hover:border-aceh-green'}`}
+                            : 'text-ink-soft border-transparent hover:text-aceh-green hover:border-aceh-green active:text-aceh-green'}`}
             >
               {label}
             </Link>

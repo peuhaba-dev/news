@@ -32,14 +32,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const results = await searchPosts(query)
 
   return (
-    <div className="max-w-portal mx-auto px-5 mt-8 mb-16">
-      <div className="bg-aceh-green rounded-xl px-8 py-10 mb-8 text-center">
-        <h1 className="font-head text-[28px] font-black text-white mb-4">Cari Berita Aceh</h1>
-        <form method="GET" action="/search" className="flex gap-2 max-w-xl mx-auto">
+    <div className="max-w-portal mx-auto px-4 sm:px-5 mt-6 sm:mt-8 mb-16">
+      <div className="bg-aceh-green rounded-xl px-4 sm:px-8 py-7 sm:py-10 mb-8 text-center">
+        <h1 className="font-head text-[22px] sm:text-[28px] font-black text-white mb-4">Cari Berita Aceh</h1>
+        <form method="GET" action="/search" className="flex flex-col xs:flex-row gap-2 max-w-xl mx-auto">
           <input type="search" name="q" defaultValue={query} placeholder="Ketik kata kunci..." autoFocus
-            className="flex-1 px-4 py-3 rounded-lg text-[15px] text-ink outline-none focus:ring-2 focus:ring-aceh-gold" />
+            className="flex-1 px-4 py-3 rounded-lg text-[16px] text-ink outline-none focus:ring-2 focus:ring-aceh-gold" />
           <button type="submit"
-            className="bg-aceh-gold text-ink font-label font-bold tracking-[0.5px] px-6 py-3 rounded-lg hover:brightness-95 transition-all">
+            className="bg-aceh-gold text-ink font-label font-bold tracking-[0.5px] px-6 py-3 rounded-lg hover:brightness-95 active:brightness-90 transition-all min-h-[48px]">
             Cari
           </button>
         </form>

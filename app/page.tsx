@@ -56,7 +56,7 @@ export default async function HomePage() {
   const bigCard     = latest[3] ?? latest[0]
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       {/* ── Top ad banner ── */}
       <div className="max-w-portal mx-auto px-4 sm:px-5 mt-3 sm:mt-4">
         <AdSlot slot="top" />
@@ -153,7 +153,7 @@ export default async function HomePage() {
           {/* Section: Religi & Budaya */}
           <div>
             <SectionHeader title="Religi & Budaya Aceh" emoji="☪" href="/category/religi" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {latest.slice(4, 8).map((post: any, i: number) => (
                 <Link
                   key={post.id}

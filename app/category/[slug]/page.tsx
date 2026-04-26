@@ -59,14 +59,14 @@ export default async function CategoryPage({
   const [featuredPost, ...restPosts] = posts
 
   return (
-    <div className="max-w-portal mx-auto px-5 mt-6">
+    <div className="max-w-portal mx-auto px-4 sm:px-5 mt-5 sm:mt-6">
       {/* ── Category header band ── */}
-      <div className="bg-aceh-green rounded-lg px-5 py-4 mb-6 flex items-center gap-3">
-        <h1 className="font-label text-[24px] font-bold text-white tracking-[1px] uppercase">
+      <div className="bg-aceh-green rounded-lg px-4 sm:px-5 py-3.5 mb-6 flex items-center gap-3">
+        <h1 className="font-label text-[20px] sm:text-[24px] font-bold text-white tracking-[1px] uppercase truncate">
           {category.name}
         </h1>
         <span className="bg-white/20 text-white font-label text-[11px] tracking-[1px]
-                         px-2.5 py-1 rounded-full">
+                         px-2.5 py-1 rounded-full shrink-0">
           {posts.length} Artikel
         </span>
       </div>
@@ -75,10 +75,7 @@ export default async function CategoryPage({
       <AdSlot slot="top" className="mb-6" />
 
       {/* ── Main 2-col layout ── */}
-      <div
-        className="grid gap-7"
-        style={{ gridTemplateColumns: 'minmax(0,1fr) 320px' }}
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 lg:gap-7">
         {/* Left column */}
         <div>
           <SectionHeader

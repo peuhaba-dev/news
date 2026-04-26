@@ -30,6 +30,9 @@ const config: Config = {
         label: ['var(--font-label)', 'sans-serif'],
         body:  ['var(--font-body)', 'system-ui', 'sans-serif'],
       },
+      screens: {
+        xs: '480px',
+      },
       maxWidth: {
         portal: '1280px',
       },

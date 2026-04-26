@@ -61,7 +61,7 @@ export default function CommentForm({ postId }: CommentFormProps) {
         </div>
         <p className="text-[12px] text-ink-soft">Komentar akan ditampilkan setelah melewati proses moderasi.</p>
         <button type="submit" disabled={status === 'loading'}
-          className="bg-aceh-green text-white font-label font-semibold tracking-[0.5px] px-6 py-2.5 rounded hover:bg-aceh-green-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+          className="bg-aceh-green text-white font-label font-semibold tracking-[0.5px] px-6 py-3 rounded hover:bg-aceh-green-dark active:bg-aceh-green-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed min-h-[48px] w-full sm:w-auto">
           {status === 'loading' ? 'Mengirim...' : 'Kirim Komentar'}
         </button>
       </form>

@@ -52,7 +52,7 @@ export default function Footer() {
 
       <footer className="bg-[#111827] text-white">
         {/* Top grid */}
-        <div className="max-w-portal mx-auto px-5 pt-10 pb-8 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <div className="max-w-portal mx-auto px-4 sm:px-5 pt-10 pb-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Brand col */}
           <div>
@@ -128,8 +128,9 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10">
           <div
-            className="max-w-portal mx-auto px-5 py-4 flex flex-col items-center
+            className="max-w-portal mx-auto px-4 sm:px-5 py-4 flex flex-col items-center
                        gap-2 text-center text-[12px] text-white/50"
+            style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
           >
             <p>
               © {new Date().getFullYear()}{' '}
