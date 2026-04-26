@@ -3,7 +3,7 @@
  * Mapping camelCase (API) → snake_case (komponen lama)
  */
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
+const API = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${API}${path}`, { next: { revalidate: 60 } })
@@ -78,7 +78,7 @@ export async function getPostsByCategory(slug: string, limit = 12) {
 // ─── CATEGORIES ───────────────────────────────────────
 export async function getAllCategories() {
   const data = await get<any[]>('/api/berita/categories')
-  return (Array.isArray(data) ? data : []).map(mapCategory)
+  return (Array.isArray(data) ? data : []).filter((c: any) => (c.order ?? 0) < 100).map(mapCategory)
 }
 
 export async function getCategoryBySlug(slug: string) {
