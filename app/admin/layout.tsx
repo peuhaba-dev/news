@@ -19,6 +19,7 @@ export default function AdminLayout({
     { label: 'Kategori', href: '/admin/categories', icon: '🏷' },
     { label: 'Komentar', href: '/admin/comments', icon: '💬' },
     { label: 'Breaking News', href: '/admin/breaking-news', icon: '📢' },
+    { label: 'Iklan', href: '/admin/iklan', icon: '📣' },
   ]
 
   return (

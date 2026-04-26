@@ -146,7 +146,7 @@ export default async function ArticlePage({
               <span className="w-1 h-1 rounded-full bg-border" />
               <span>{formatDateTime(post.created_at)}</span>
               <span className="w-1 h-1 rounded-full bg-border" />
-              <span>{post.views.toLocaleString('id-ID')} dibaca</span>
+              <span>{(post.views ?? 0).toLocaleString('id-ID')} dibaca</span>
               <span className="w-1 h-1 rounded-full bg-border" />
               <span>{readTime(post.content)}</span>
             </div>
