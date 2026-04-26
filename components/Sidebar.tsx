@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getPostsByCategory } from '@/lib/queries'
 import type { Post } from '@/types'
 import AdSlot from './AdSlot'
 import SectionHeader from './SectionHeader'
@@ -23,22 +24,21 @@ const TAGS = [
   { label: 'Tol Aceh', aceh: false }, { label: 'Ekonomi Aceh', aceh: false },
 ]
 
-const GAMPONG_ITEMS = [
-  {
-    label: 'Gampong Inspiratif',
-    title: 'Gampong Lamreung: Dari Sawah Konvensional ke BUMDes Organik Rp 80 Juta/Bulan',
-  },
-  {
-    label: 'Gampong Digital',
-    title: 'Gampong Lambaro Angan Kini Punya WiFi Gratis dan Loket Pelayanan Online',
-  },
-]
+
 
 interface SidebarProps {
   mostReadPosts: Post[]
 }
 
-export default function Sidebar({ mostReadPosts }: SidebarProps) {
+export default async function Sidebar({ mostReadPosts }: SidebarProps) {
+  const [inspiratif, digital] = await Promise.all([
+    getPostsByCategory('gampong-inspiratif', 1),
+    getPostsByCategory('gampong-digital', 1),
+  ])
+  const gampongItems = [
+    { label: 'Gampong Inspiratif', slug: 'gampong-inspiratif', post: inspiratif[0] ?? null },
+    { label: 'Gampong Digital',    slug: 'gampong-digital',    post: digital[0]    ?? null },
+  ]
   return (
     <aside className="space-y-7">
 
@@ -117,18 +117,21 @@ export default function Sidebar({ mostReadPosts }: SidebarProps) {
       {/* ── Gampong Focus ── */}
       <div>
         <SectionHeader title="Gampong" emoji="🏡" />
-        {GAMPONG_ITEMS.map(({ label, title }) => (
-          <div
+        {gampongItems.map(({ label, slug, post }) => (
+          <Link
             key={label}
-            className="bg-aceh-gold-light border border-aceh-gold/25 border-l-4 border-l-aceh-gold
-                       rounded-md rounded-l-none px-3.5 py-3.5 mb-2 cursor-pointer
+            href={post ? `/news/${post.slug}` : `/category/${slug}`}
+            className="block bg-aceh-gold-light border border-aceh-gold/25 border-l-4 border-l-aceh-gold
+                       rounded-md rounded-l-none px-3.5 py-3.5 mb-2
                        hover:bg-[#fff3cc] transition-colors duration-150"
           >
             <div className="font-label text-[10px] tracking-[1px] uppercase text-aceh-gold font-bold mb-1">
               {label}
             </div>
-            <p className="font-head text-[14px] font-bold text-ink leading-[1.35]">{title}</p>
-          </div>
+            <p className="font-head text-[14px] font-bold text-ink leading-[1.35]">
+              {post ? post.title : 'Belum ada artikel'}
+            </p>
+          </Link>
         ))}
       </div>
 
