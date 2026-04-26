@@ -18,6 +18,7 @@ export default function AdminLayout({
     { label: 'Tulis', href: '/admin/posts/new', icon: '➕' },
     { label: 'Kategori', href: '/admin/categories', icon: '🏷' },
     { label: 'Komentar', href: '/admin/comments', icon: '💬' },
+    { label: 'Breaking News', href: '/admin/breaking-news', icon: '📢' },
   ]
 
   return (
