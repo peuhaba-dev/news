@@ -8,6 +8,9 @@ const REGIONS = [
   'Banda Aceh', 'Aceh Besar', 'Pidie', 'Bireuen',
   'Lhokseumawe', 'Aceh Utara', 'Langsa', 'Aceh Timur',
   'Aceh Tengah', 'Aceh Barat', 'Sabang', 'Subulussalam',
+  'Aceh Selatan', 'Aceh Tenggara', 'Aceh Singkil', 'Aceh Tamiang',
+  'Aceh Jaya', 'Aceh Barat Daya', 'Gayo Lues', 'Nagan Raya',
+  'Pidie Jaya', 'Bener Meriah', 'Simeulue',
 ]
 
 const TAGS = [
