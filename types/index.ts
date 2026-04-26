@@ -32,7 +32,7 @@ export interface Comment {
 
 export interface BreakingNews {
   id: string
-  text: string
+  title: string
   active: boolean
   created_at: string
 }
