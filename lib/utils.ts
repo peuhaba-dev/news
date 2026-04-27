@@ -45,7 +45,7 @@ export function slugify(text: string): string {
  * Calculate estimated read time (words / 200 wpm)
  */
 export function readTime(content: string): string {
-  const words = content.trim().split(/\s+/).length
+  const words = (content ?? "").trim().split(/\s+/).length
   const minutes = Math.ceil(words / 200)
   return `${minutes} menit baca`
 }

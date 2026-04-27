@@ -223,7 +223,7 @@ export default async function ArticlePage({
                 className="w-12 h-12 rounded-full bg-gradient-to-br from-aceh-green to-aceh-green-dark
                            flex items-center justify-center font-label text-[18px] text-white font-bold shrink-0"
               >
-                {post.author.charAt(0)}
+                {(post.author ?? "A").charAt(0)}
               </div>
               <div>
                 <div className="font-label text-[14px] font-bold text-ink">{post.author}</div>
