@@ -16,12 +16,9 @@ import SectionHeader from '@/components/SectionHeader'
 import CommentForm from '@/components/CommentForm'
 import { formatDateTime, readTime } from '@/lib/utils'
 
-/* ─── Static params for ISR ────────────────────────── */
-export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
+export const dynamic = 'force-dynamic'
 
+/* ─── Static params for ISR ────────────────────────── */
 /* ─── Dynamic metadata ─────────────────────────────── */
 export async function generateMetadata({
   params,

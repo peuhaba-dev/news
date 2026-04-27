@@ -12,6 +12,9 @@ import Sidebar from '@/components/Sidebar'
 import AdSlot from '@/components/AdSlot'
 import SectionHeader from '@/components/SectionHeader'
 
+export const dynamic = 'force-dynamic'
+
+
 /* ─── Static params ─────────────────────────────────── */
 export async function generateStaticParams() {
   const slugs = await getAllCategorySlugs()
