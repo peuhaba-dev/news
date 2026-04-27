@@ -6,9 +6,17 @@
 const API = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'https://api.meureno.com'
 
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${API}${path}`, { next: { revalidate: 60 } })
-  if (!res.ok) return [] as unknown as T
-  return res.json()
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 8000) // 8 detik timeout
+  try {
+    const res = await fetch(`${API}${path}`, { next: { revalidate: 60 }, signal: controller.signal })
+    clearTimeout(timeout)
+    if (!res.ok) return [] as unknown as T
+    return res.json()
+  } catch {
+    clearTimeout(timeout)
+    return [] as unknown as T
+  }
 }
 
 // ─── MAPPER ───────────────────────────────────────────
