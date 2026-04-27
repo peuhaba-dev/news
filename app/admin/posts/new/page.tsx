@@ -47,7 +47,7 @@ export default function NewPostPage() {
     setSaving(true)
     setError('')
 
-    const slug = slugify(title) + '-' + Date.now()
+    const slug = (slugify(title).slice(0, 150)) + '-' + Date.now()
 
     const res = await fetch(`${API}/api/berita/posts`, {
       method: 'POST',
