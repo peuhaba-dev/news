@@ -8,6 +8,7 @@ import Ticker from '@/components/Ticker'
 import CategoryBar from '@/components/CategoryBar'
 import Footer from '@/components/Footer'
 import { getAllCategories, getBreakingNews } from '@/lib/queries'
+import CookieConsent from '@/components/CookieConsent'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -96,6 +97,7 @@ export default async function RootLayout({
         <CategoryBar categories={categories} />
         <main>{children}</main>
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   )
