@@ -98,6 +98,14 @@ export default async function RootLayout({
         <main>{children}</main>
         <Footer />
         <CookieConsent />
+        {/* Google Analytics */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ48PMB1JC" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XQ48PMB1JC');
+        `}</Script>
       </body>
     </html>
   )
