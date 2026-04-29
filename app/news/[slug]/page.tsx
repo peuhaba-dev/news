@@ -152,21 +152,28 @@ export default async function ArticlePage({
             {/* Share row */}
             <div className="flex flex-wrap items-center gap-2 mb-6">
               <span className="text-[12px] text-ink-soft font-semibold">Bagikan:</span>
-              {[
-                { label: 'Facebook', color: 'bg-[#1877F2]' },
-                { label: 'Twitter/X', color: 'bg-[#000]' },
-                { label: 'WhatsApp', color: 'bg-[#25D366]' },
-                { label: 'Telegram', color: 'bg-[#2CA5E0]' },
-              ].map(({ label, color }) => (
-                <button
-                  key={label}
-                  className={`${color} text-white text-[11px] font-label px-3 py-1.5
-                              rounded font-semibold tracking-[0.5px] active:opacity-75
-                              hover:opacity-85 transition-opacity min-h-[36px]`}
-                >
-                  {label}
-                </button>
-              ))}
+              {(() => {
+                const url = encodeURIComponent(`https://berita.meureno.com/news/${post.slug}`)
+                const title = encodeURIComponent(post.title)
+                return [
+                  { label: 'Facebook', color: 'bg-[#1877F2]', href: `https://www.facebook.com/sharer/sharer.php?u=${url}` },
+                  { label: 'Twitter/X', color: 'bg-[#000]', href: `https://twitter.com/intent/tweet?url=${url}&text=${title}` },
+                  { label: 'WhatsApp', color: 'bg-[#25D366]', href: `https://wa.me/?text=${title}%20${url}` },
+                  { label: 'Telegram', color: 'bg-[#2CA5E0]', href: `https://t.me/share/url?url=${url}&text=${title}` },
+                ].map(({ label, color, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${color} text-white text-[11px] font-label px-3 py-1.5
+                                rounded font-semibold tracking-[0.5px] active:opacity-75
+                                hover:opacity-85 transition-opacity min-h-[36px] flex items-center`}
+                  >
+                    {label}
+                  </a>
+                ))
+              })()}
             </div>
 
             {/* Featured image */}
