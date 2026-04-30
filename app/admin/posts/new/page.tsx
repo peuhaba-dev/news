@@ -91,17 +91,17 @@ export default function NewPostPage() {
           </label>
           <input type="text" value={title} onChange={e => setTitle(e.target.value)} required
             placeholder="Judul artikel yang menarik..."
-            className="w-full border border-border rounded-md px-3.5 py-2.5 text-[15px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
+            className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[15px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-[13px] font-semibold text-ink-mid mb-1.5">Kategori</label>
             {loadingCats ? (
-              <div className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink-soft bg-gray-50 animate-pulse">Memuat...</div>
+              <div className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink-soft bg-gray-50 animate-pulse">Memuat...</div>
             ) : (
               <select value={categoryId} onChange={e => setCategoryId(e.target.value)}
-                className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green bg-white">
+                className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green bg-white">
                 <option value="">Pilih kategori...</option>
                 {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
               </select>
@@ -113,7 +113,7 @@ export default function NewPostPage() {
             </label>
             <input type="text" value={author} onChange={e => setAuthor(e.target.value)} required
               placeholder="Nama penulis"
-              className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
+              className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export default function NewPostPage() {
           <label className="block text-[13px] font-semibold text-ink-mid mb-1.5">URL Gambar Utama</label>
           <input type="url" value={featuredImage} onChange={e => setFeaturedImage(e.target.value)}
             placeholder="https://..."
-            className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
+            className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green focus:ring-2 focus:ring-aceh-green/20" />
           {featuredImage && (
             <img src={featuredImage} alt="preview" className="mt-2 h-32 w-full object-cover rounded-md border" />
           )}
@@ -133,7 +133,7 @@ export default function NewPostPage() {
           </label>
           <textarea value={excerpt} onChange={e => setExcerpt(e.target.value)} required
             rows={2} maxLength={300} placeholder="Ringkasan singkat artikel..."
-            className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-none" />
+            className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-none" />
           <p className="text-[11px] text-ink-soft text-right mt-1">{excerpt.length}/300</p>
         </div>
 
@@ -165,7 +165,7 @@ export default function NewPostPage() {
           </label>
           <textarea value={content} onChange={e => setContent(e.target.value)} required
             rows={16} placeholder="<p>Tulis konten artikel di sini...</p>"
-            className="w-full border border-border rounded-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-y font-mono text-sm" />
+            className="w-full border border-border border-t-0 rounded-b-md px-3.5 py-2.5 text-[14px] text-ink outline-none focus:border-aceh-green resize-y font-mono text-sm" />
         </div>
 
         <div className="flex items-center gap-3">
