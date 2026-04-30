@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import {
   getCategoryBySlug,
   getPostsByCategory,
@@ -44,12 +45,19 @@ export async function generateMetadata({
 }
 
 /* ─── Page component ────────────────────────────────── */
+const PER_PAGE = 12
+
 export default async function CategoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
   const { slug } = await params
+  const { page: pageStr = '1' } = await searchParams
+  const page = Math.max(1, parseInt(pageStr) || 1)
+
   const [category, mostRead] = await Promise.all([
     getCategoryBySlug(slug),
     getMostReadPosts(5),
@@ -57,7 +65,9 @@ export default async function CategoryPage({
 
   if (!category) notFound()
 
-  const posts = await getPostsByCategory(slug, 12)
+  const allPosts = await getPostsByCategory(slug, 999)
+  const totalPages = Math.ceil(allPosts.length / PER_PAGE)
+  const posts = allPosts.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
   const [featuredPost, ...restPosts] = posts
 
@@ -70,7 +80,7 @@ export default async function CategoryPage({
         </h1>
         <span className="bg-white/20 text-white font-label text-[11px] tracking-[1px]
                          px-2.5 py-1 rounded-full shrink-0">
-          {posts.length} Artikel
+          {allPosts.length} Artikel
         </span>
       </div>
 
@@ -115,6 +125,30 @@ export default async function CategoryPage({
                 Kategori <strong>{category.name}</strong> belum memiliki artikel.
                 Silakan kembali lagi nanti.
               </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8 flex-wrap">
+              {page > 1 && (
+                <Link href={`/category/${slug}?page=${page - 1}`}
+                  className="px-4 py-2 border border-border rounded-lg text-sm font-semibold text-ink hover:bg-aceh-green hover:text-white hover:border-aceh-green transition-colors">
+                  ← Sebelumnya
+                </Link>
+              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <Link key={p} href={`/category/${slug}?page=${p}`}
+                  className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors ${p === page ? 'bg-aceh-green text-white' : 'border border-border text-ink hover:bg-aceh-green hover:text-white hover:border-aceh-green'}`}>
+                  {p}
+                </Link>
+              ))}
+              {page < totalPages && (
+                <Link href={`/category/${slug}?page=${page + 1}`}
+                  className="px-4 py-2 border border-border rounded-lg text-sm font-semibold text-ink hover:bg-aceh-green hover:text-white hover:border-aceh-green transition-colors">
+                  Selanjutnya →
+                </Link>
+              )}
             </div>
           )}
         </div>
