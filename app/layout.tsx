@@ -41,6 +41,7 @@ export const metadata: Metadata = {
   keywords: ['berita aceh', 'aceh terkini', 'banda aceh', 'gampong', 'kopi gayo'],
   authors: [{ name: 'Redaksi Berita Meureno' }],
   creator: 'PT. Meureno Media Digital',
+  verification: { google: 'ca-pub-1150834306562665' },
   publisher: 'PT. Meureno Media Digital',
   openGraph: {
     type: 'website',
