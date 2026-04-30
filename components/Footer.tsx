@@ -139,6 +139,11 @@ export default function Footer() {
             </p>
             <div className="flex gap-4 flex-wrap justify-center">
               {[
+                { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
+                { label: 'Ketentuan Penggunaan', href: '/ketentuan-penggunaan' },
+                { label: 'Disclaimer', href: '/disclaimer' },
+                { label: 'DMCA', href: '/dmca' },
+                { label: 'Kontak', href: '/kontak' },
               ].map(({ label, href }) => (
                 <Link
                   key={label}
